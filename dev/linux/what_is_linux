@@ -1,0 +1,17 @@
+An operating system consists of the software that manages your computer and lets you run applications on it.
+
+The features that make up linux (and similar operating systems) include the following:
+- Detecting and preparing hardware
+    - When the Linux system boots up (when you turn on your computer), it looks at the components on your computer: CPU, hard drive, network cards, and so on) and loads the software (drivers and modules) needed to access those particular hardware devices
+- Managing processes
+    - Keeps track of multiple processes running at the same time and decide which have access to the CPU and when. It also offers ways of starting, stopping, and changing the status of processes
+- Managing memory
+    - RAM and swap space (extended memory) must be allocated to applications as they need memory. The OS decides how requests for memory are handled
+- Providing user interfaces
+    - The OS must provide users with ways of accessing the system. The first linux systems were accessed from a command-line interpreter called a shell. Graphical desktop interfaces are commonly available today
+- Controlling filesystems
+    - Filesystem structures are built in to the OS (or loaded as modules). The OS controls ownership and access to the files and directories that the filesystems contain
+- Providing user access and authentication
+    - Can create user accounts and therefore boundaries between the users on a system. Separate user and group accounts enable users to control their own files and processes
+- Offering administrative utilities
+    - Adding users, managing disks, monitoring the network, installing software, and generally secure and manage your computer
