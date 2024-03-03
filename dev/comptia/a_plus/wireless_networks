@@ -158,3 +158,36 @@ Configuring a Wireless Network
 - enable wireless isolation
 - enable MAC filtering
 - disable WPS setting
+
+5G comes in three different bands:
+1. low
+2. mid: most used because it balances coverage with speed
+3. high
+
+WISP Connections
+----------------
+
+Microwave:
+    - uses a beam of radio waves in the microwave frequency range to transmit information between two fixed locations
+    - includes frequencies in the ranges:
+        - ultra high frequency (UHF)
+        - super high frequency (SHF)
+        - extremely high frequency (EHF)
+    - both antennas must have line of sight
+
+Satellite Connections
+---------------------
+
+- a method of using communication satellites located in space to connect a user to the internet
+- some drawbacks
+    - slow: not as fast as a:
+        - fiber modem
+        - microwave
+        - cable modem
+    - expensive
+    - high latency
+
+Hands on with WANs
+------------------
+
+

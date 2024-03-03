@@ -1,0 +1,35 @@
+Network Configurations
+----------------------
+
+Transmission Control Protocol / Internet Protocol (TCP/IP)
+    - communication across LAN or WAN
+    - 4 layers
+        1. Link/Network Interface Layer
+            - responsible for putting frames in the physical network's transmission media. this media could be a
+                - copper twisted pair cable
+                - fiber optic cable
+                - radio waves
+            - data can only travel through the local area network
+        2. Internet Layer
+            - used to adress packets and route them across the network
+            - where Internet Protocol (IP) enters the discussion
+        3. Transport Layer
+            - shows how to send the packets
+                - Transmission Control Protocol (TCP)
+                    - guaranteed connection oriented method of sending packets from one device to another over the network
+                    - slower than UDP
+                - User Datagram Protocol (UDP)
+                    - connectionless protocol, so lower overhead, making it faster than TCP
+                    - delivery is not guaranteed like with TCP
+        4. Application Layer
+            - contains all the protocols that perform higher-level functions
+
+IPv4
+----
+
+- most common type of IP addressing
+    - examples
+        - 10.1.2.3
+        - 172.21.243.67
+    - dotted-decimal notation
+    - each number is called an octet because it represents an 8-bit number (0 - 255)
