@@ -1,0 +1,18 @@
+1. Identify the problem
+    - gather information from the user
+    - identify user changes
+    - make backups before making any changes
+    - ask if there have been any environmental or infrastructure changes recently
+2. Establish a theory of probable cause
+    - immediately consider things that are obvious and easy to check
+        - for example, if a workstation is not powering on
+            - make sure it is plugged to the wall outlet properly
+            - make sure the outlet has power
+3. Test the theory to determine the cause
+    - in our workstation example, if your theory is that the outlet is faulty, try plugging the workstation in to a different outlet
+    - if the theory is not confirmed, re-establish a new theory
+4. Establish a plan of action to resolve the problem and implement the solution
+    - our plan of action would be to replace the outlet
+    - the solution to implement that would be to buy and replace the outlet or put in a work order so a professional can replace it
+5. Verify full system functionality and if applicable, implement preventative measures
+6. Document the findings, actions, and outcome

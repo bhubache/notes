@@ -1,0 +1,58 @@
+bit uses ``b``
+byte uses ``B`` 
+
+1,000,000 bits  = 1 Megabit  (Mb)
+1,000,000 bytes = 1 Megabyte (MB)
+
+1,000,000,000 bits  = 1 Gigabit  (Gb)
+1,000,000,000 bytes = 1 Gigabyte (GB)
+
+USB Cables (Universal Serial Bus)
+---------------------------------
+
+Firstly, these were designed to replace serial cables which would be connected to a computer using a DB9 (most common) or DB25 connector
+
+DB9 Connector: D-shaped sub-miniature pin at the back of a computer. It also had two thumb screws to screw the serial cable into the serial port on the back
+               of a computer's motherboard. They were called serial because the data was set in a straight line, one bit at a time. The important thing to
+               know about these is that you could only have one device plugged into one serial port.
+
+With USB, you can connect up to 127 devices to a single port using something called a daisy-chain. This doesn't work in practice though because the host controller (which controls the port), uses the same amount of bandwidth for all devices in a port.
+
+Current Version Name | Version Name|      Market Name      | Original Name | Transfer Rate | Theoretical Speed
+--------------------------------------------------------------------------------------------------------------
+        USB 2.0      |  LowSpeed   |   Low Speed           |   USB 1.0     |    1.5 Mbps   |    0.1875 MB/s
+                     |  FullSpeed  |   Full Speed          |   USB 1.1     |   12   Mbps   |    1.5    MB/s
+                     |   HiSpeed   |   Hi-Speed            |   USB 2.0     |  480   Mbps   |   60      MB/s
+        USB 3.2      |    Gen 1    | SuperSpeed USB        | USB 3.1GEN1   |    5   Gbps   |  500      MB/s
+                     |    Gen 2    | SuperSpeed USB 10Gbps | USB 3.1GEN2   |   10   Gpbs   | 1212.12   MB/s
+                     |    Gen 2x2  | SuperSpeed USB 20Gbps | N/A           |   20   Gpbs   | 2424.24   MB/s
+        USB 4                                                              |   40   Gpbs   |    5      GB/s
+
+
+Longer cables have higher chances of resistance and speed and signal deterioration
+
+In addition to data transfer, USB can also provide power to devices. The amount of power is determined by the type of port
+
+USB 1.0/USB 2.0
+500 milliamps or 0.5 amsp
+
+USB 3.0
+900 milliamps or 0.9 amps
+
+Powered Device (PD) Port
+1500 milliamps or 1.5 amps (7.5 W)
+
+There are different types of connectors.
+USB Type A: flat rectangular connector that allows to insert the USB cable in only one direction. Very common in desktops and laptops.
+USB Type C: Came out with USB 3 and beyond. You can insert the cable in either direction.
+USB Type B:
+    - Type B: Usually on larger devices such as printers. More of a square shaped port with the top corners cut off so it can only be inserted in one direction
+    - Type B mini: almost like a trapezoid. Found on early tablets and smartphones but most have switched to type C.
+    - Type B micro: shorter and skinnier than type B mini. Normally used on small devices like wearables such as smart glasses and smart watches as well as small music players
+USB Micro B Super Speed (for USB 3): Looks like a figure 8. typically used on the back of portable storage devices.
+
+
+Video Cables
+------------
+
+HDMI (High Definition Multimedia Interface)
