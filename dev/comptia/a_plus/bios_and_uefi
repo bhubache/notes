@@ -1,0 +1,114 @@
+Basic Input Output System (BIOS)
+- older version
+- only supports 32-bit processors and motherboards
+- program that a CPU uses to start the computer system after being turned on
+- method for configuring the motherboard using a text-based interface
+- stored as firmware on the motherboard
+- Power-on self-test
+    - test an initialize the:
+        - processor
+        - video card
+        - disk drives
+        - adapters
+- hardware configuration
+- boot order setup
+- stored in read-only memory (ROM)
+    - type of chip embedded in the motherboard and can be upgraded through flashing
+- settings are stored saved in the CMOS (Complementary Metal-Oxide Semiconductor)
+    - battery powered memory chip
+    - non-volatile memory
+    - store BIOS settings
+    - built into motherboard
+    - as long as the battery has power, the settings will be maintained
+- only supports Master Boot Record (MBR)
+    - storage device partition table
+
+Unified Extensible Firmware Interface (UEFI)
+- supports 64-bit processors
+- provides a GUI
+- stored as firmware on the motherboard
+- supports larger HDDs and SSDs
+    - (9.4 zettabytes ~ 9.4 * 10^21 bytes)
+- supports the new GUID Partition Table (GPT) format
+- faster boot-up
+- uses a larger ROM size
+
+
+Boot Options
+------------
+
+boot process:
+1. Power-On Self-Test (POST)
+    - diagnostic testing sequence to check the computer's basic input/output system
+    - check's computer's:
+        - keyboard
+        - RAM
+        - disk drives
+        - storage devices
+        - and other hardware
+    - if everything is detected and operating properly, the computer can begin to boot up
+    - if hardware is not detected or not operating properly, the BIOS will issue an error message
+        - since the post runs before the video card is activated, it may not be possible to display everything to the screen. So, variable beeps are used to tell what's wrong
+2. BIOS reads settings from the CMOS and the BIOS will look for an operating system from the configured boot devices
+    - the BIOS has a low-level OS which allows it to take input and give output to the basic components including the:
+        - keyboard
+        - disk drives
+        - video display
+    - turns control over to operating system
+
+For safety, corporate environments will have booting from an optical drive or USB drive disabled, because if someone has physical access to your machine, they could boot into a different OS and access your system without needing to know your particular OS's login credentials.
+
+To upgrade the BIOS and UEFI, you perform flashing.
+- performed during upgrades, security fixes, or feature improvements
+
+BIOS/UEFI Security
+------------------
+
+- Supervisor/Administrator/Setup Password
+    - used to protect access to the BIOS or UEFI configuration program and prevents access from unauthorized users
+    - does not prevent booting to the OS
+- User/System Password
+    - used to lock access to the computer
+- Storage/Hard Drive Password
+    - password that locks access to a hard drive connected to the system and requires the end user's password
+- Secure Boot
+    - enabled in the UEFI interface and settings and is not supported by BIOS
+    - performs three checks
+    - has to be enabled inside UEFI
+    - OS has to support it
+- setting up permissions for the USB ports on the motherboard
+    - most modern systems can be configured to enable or disable the USB ports on the motherboard
+
+TPM and HSM
+-----------
+
+Hardware Root of Trust (RoT) is the foundation of all secure operations of a computing system.
+    - cryptographic module embedded in a computer system that endorses trusted execution and attests to boot settings and metrics
+    - used to scan the boot metrics in the OS files to verify signatures and then use them to sign the report
+    - contains keys used for cryptographic functions
+    - enables the secure boot process
+    - it is inherently trusted and so it must be secure by design
+    - TPM is a hardware RoT
+
+Trusted Platform Module (TPM)
+    - most common hardware RoT
+    - specification for hardware-based storage of digital certificates, keys, hashed passwords, and other user and platform identification information
+    - hardcoded with unique and unchageable key that's called the endorsement key (EK)
+    - ensures the system have not been tampered with:
+        - firmware
+        - boot loader
+        - OS kernel
+
+Hardware Security Module (HSM)
+    - appliance for generating and storing cryptographic keys that is less susceptible to tampering and insider threats
+
+BIOS/UEFI Cooling Options
+-------------------------
+
+BIOS and UEFI have the ability to configure fans.
+
+Configuring the BIOS
+--------------------
+
+Configuring the UEFI
+--------------------

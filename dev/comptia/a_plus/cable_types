@@ -55,4 +55,147 @@ USB Micro B Super Speed (for USB 3): Looks like a figure 8. typically used on th
 Video Cables
 ------------
 
-HDMI (High Definition Multimedia Interface)
+High Definition Multimedia Interface (HDMI)
+===========================================
+
+- The most widely used video interface
+
+Typically used for the high definition standard 1920x1080 pixels but it supports higher resolutions as well, going up to 4k and 8K resolutions with 60, 120, or 144 hz.
+It also supports something called HDMI Digital Content Protection (HDCP) which allows a device to validate the connection. It allows the device to do a handshake with the display it's connecting to to make sure they are both authorized to receive that signal.
+
+Example:
+
+    Roku device hooked up to your TV. It uses HDCP to make that the device streaming the data (the roku device) is authorized to see it and the TV you're sending it to is authorized to receive it.
+
+There are three different connector types with HDMI
+- Type A: regular full-size connector
+- Type C: mini connector
+- Type B: micro connector
+
+They all only fit one direction into their port, though they have a distinct shape and size to make it easier to get right. They all also fully support all the resolutions and refresh rates. There are different connectors just so smaller and larger devices can have more convenient form factors.
+
+There are different categories of HDMI
+- Standard (category 1): used for video content, supports 1080p and 60 hz
+- High Speed (category 2): great length of distance and higher resolution and refresh rate
+- Modern HDMI (versions 2 and 2.1) also have higher data transfers speeds of:
+    - 18 Gbps for premium high speed
+    - 48 Gbps for ultra high speed
+
+
+Display Port (DP)
+=================
+
+Developed by the Video Electronic Standards Association (VESA). This organization represents and the PC graphic adapters and display tech companies that make TVs, video games, graphics cards and things like that. The issue they saw with HDMI is that it was a proprietary interface, meaning anyone that wanted to produce something with HDMI, had to pay the original developer a royalty fee. So, display port was created as a competitor to HDMI.
+
+Display port has the same capabilities as HDMI.
+
+Two form factors:
+- Full size DisplayPort (DP)
+- Mini DisplayPort (MDP)
+
+Both only fit in one direction.
+Can support data transfers up to 20 Gbps.
+
+Digital Visual Interface (DVI)
+==============================
+
+Support analog and digital outputs. Old technology that came out in the late 1990s. HDMI wasn't super popular yet and many people used analog monitors.
+
+Three different types:
+- DVI-A (analog): supports analog signals
+- DVI-D (digital): supports digital signals
+- DVI-I: supports analog or digital signals
+
+Uses the older form of pins as a way of connecting to things. (I used to use this and it was a pain to line up properly).
+
+DVI was an evolution of the older VGA.
+
+Video Graphics Array (VGA)
+==========================
+
+Uses a 15-pin standard analog video interface port. Each pin controlled a different part of the analog signal. So if you broke one of the pins, you could perhaps have a screen that gave everything a blue tint, because that broken pin would've been involved in color correction for that. This was a big issue with VGA.
+
+D-shaped connector similar to a serial cable.
+
+Thunderbolt
+===========
+
+Acts like a display interface and can do data transfer. Very popular with apple devices originally but it's also found its way into windows and linux computers as well.
+Three main versions:
+- Thunderbolt 1 and Thunderbolt 2
+    - use a physical connector that's backwards compatible with DP. The only way to really tell that it's thunderbolt and not display port is if it has a little lightning bolt on it
+- Thunderbolt 3
+    - changed the phyiscal interface to use the same port connector as USB-C
+
+All thunderbolt 3 ports support USB-C but not all USB-C ports support thunderbolt 3.
+
+Maximum cable length for thunderbolt 3 is 1.6 ft, which provides up to 40 Gbps.
+
+Storage Cables
+--------------
+
+For data transfer.
+
+Thunderbolt
+===========
+
+Thunderbolt 1 and 2: uses DP-type connector
+
+Thunderbolt 3 and 4: uses USB-C type connector
+
+Thunderbolt 4 cables can be plugged into USB 4 ports and USB 4 cables can be plugged into thunderbolt 4 ports.
+
+Thunderbolt 4 supports up to 40 Gbps for data transfer (under 2 ft in length usually at around half a meter).
+
+Lightning Cable
+===============
+
+Specific proprietary connector created by Apple for mobile devices. Can fit either upwards or downwards like USB-C.
+On one end is the lightning connector, on the other will be either a USB-C or USB-A connector that can plug in to a desktop or laptop.
+
+Serial Advanced Technology Attachment (SATA)
+============================================
+
+Standard method of connecting a storage device to a motherboard.
+
+Two kinds
+- SATA 7-Pin Data Cable: Does not supply power (L-shaped connector)
+    - SATA1: Supports speeds up to 1500 Mbps (1.5 Gbps)
+    - SATA2: Supports speeds up to 3000 Mbps (3 Gbps)
+    - SATA3: Supports speeds up to 6000 Mbps (6 Gbps)
+        - limitation will be the hard drive, not the data cable
+- SATA 15-Pin Power Connector: provides the power
+
+External SATA (eSATA)
+- Cable outside of the case (same type of cable) to allow connection to an external hard drive
+- With USB 3 and USB 4 speeds now getting into 10, 20, and 40 Gbps, eSATA is becoming a lot less common
+
+Parallel Advanced Technology Attachment (PATA)
+==============================================
+
+Formerly called Integrated Drive Electronics (IDE) Interface.
+
+Uses IDE cables and connectors and standards but is differentiated from SATA.
+Came before SATA.
+
+Supports up to two devices and can communicate at the same time, hence the parallel in the name.
+
+Like SATA drives, IDE/PATA drives need two different cables to work.
+- Data transfer cable
+    - Gray, flat ribbon cable.
+    - 40 pins.
+- MOLEX Power Connector
+    - A 4-pin connector attached directly from the power supply to a device
+
+Small Computer Systems Interface (SCSI)
+=======================================
+
+Legacy parallel bus connector that allows multiple devices to be daisy chained together.
+- Narrow SCSI: supports up to 7 devices
+- Wide SCSI: supports up to 15 devices
+
+Two different types of cables
+- High Density cable - 68 pins; used a MOLEX connector to provide additional power
+- Single Connector Attachment (SCA) - 80 pins; incorporated power and data into a single cable
+
+Max speed is 320 Mbps

@@ -1,0 +1,316 @@
+A motherboard is a printed circuit board that contains computer components and provides connectors into which other circuit boards can be slotted or connected. It's essential computer's central communication backbone connectivity point.
+
+Let's review the 4 basic functions of any computer
+1. Input
+    - process of accepting data in a form that the computer can use
+    - like typing stuff with keyboard or moving around/clicking mouse
+2. Output
+    - process of displaying the processed data or information
+    - viewing a video on your monitor and hearing the audio from the speakers
+3. Processing
+    - actions performed by the CPU when receiving information
+    - usually conducted by the CPU or GPU
+4. Storage
+    - process of saving or retaining digital data, temporarily or permanently
+    - temporary storage could be through cache memory on the CPU or system memory called RAM
+    - another name for temporary storage is non-persistent storage because it is lost whenever the computer is powered off. Another name is volatile storage
+    - permanen storage is also called persistent storage and is done via hard disk drives, sold state drives, USB flash drives, tape backup drives, old school floppy disk drives, and other methods storing data outside the CPU or RAM. Also called non-volatile storage
+
+Data transferred across the motherboard measures the speed of data in MHz or GHz.
+
+volatile storage speed is fast.
+non-volatile speed is slow.
+
+Form Factors
+------------
+
+Describes the shape, layout, and type of case and power supply that will be used by the system.
+
+The form factor of a motherboard describes its shape, layout, and type of case and power supply that can be used for that particular motherboard, as well as the number and type of adapter cards that can be installed in that motherboard.
+- ATX
+    - Advanced Technology eXtended
+    - full-size motherboard and measures 12" x 9.6" in size (305 mm x 244 mm)
+    - 7 expansion card slots
+    - started in the 1990s
+- Mini-ATX
+    - smaller than ATX but contaihns the same features
+    - 11.2" x 8.2" (284 mm x 208 mm)
+    - not as common as ATX because it's not even that much smaller than ATX
+- Micro-ATX (mATX)
+    - 9.6 in^2 (244 mm x 244 mm)
+    - same as ATX except it only has 4 expansion card slots instead of 7
+- Mini-ITX
+    - Information Technology eXtended (ITX) was designed as a replacement for the ATX but never produced. Instead there's the mini version
+    - 6.7" x 6.7" (170 mm x 170 mm) with only one expansion slot
+
+The following don't have a designated shape or size because they're built for embedded systems and portable devices
+- Nano-ITX
+- Pico-ITX
+- Mobile-ITX
+
+CPU Architecture
+----------------
+
+The brains of the computer.
+The processors' architecture defines what capabilities it has.
+
+Data / instruction ****>
+Commands / Control Signals ---->
+
+
+                   |------> Secondary Memory
+                   |           ^      *
+                   |           *      *
+                   |           *      v
+Input Devices **************>  Main Memory *****************>  Output Devices
+    ^              |             *  ^  ^                            ^
+    |              |             *  *  |-------------------|        |
+    |              |             v  *                      |        |
+    |              |           Register <------------------|        |
+    |              |             *  ^                      |        |
+    |              |             *  *                      |        |
+    |              |             v  *                      |        |
+    |              |         Arithmetic & Logical Unit     |        |
+    |              |                   (ALU)               |        |
+    |              |                 ^                     |        |
+    |              |                 |                     |        |
+    |              |                 |                     |        |
+    |              |                 |                     |        |
+    |              |                 |                     |        |
+    |              |                 |                     |        |
+    |------------------------ Control Unit (CU) ---------------------
+
+
+
+
+Three main kinds of architectures:
+1. X86 (IA-32)
+    - developed by Intel with an 8-bit, 16-bit, and up to 32-bit instruction set
+    - can only support a maximum of 4 GB of RAM
+    - can only run 32-bit programs
+2. X64
+    - supports 64-bit instruction set
+    - can run 64-bit programs and 32-bit programs
+3. Advanced RISC Machine (ARM)
+    - used for low-power devices (tablets and cell phones)
+    - RISC stands for Reduced Instruction Set Computing
+    - extended battery life
+    - produces less heat
+    - uses code to do tasks
+
+CPU Sockets
+-----------
+
+Two main manufacturers of CPUs in desktop computing. They use a different socket type.
+- Intel
+- AMD
+
+When you go to insert a CPU into a motherboard, most sockets use a ZIF mechanism:
+Zero Insertion Force (ZIF)
+    - Inserts the CPU without pressing down and giving no pressure
+
+Socket typically used by Intel:
+Land Grid Array (LGA)
+    - form factor that positions all pins to connect the CPU processor into the socket
+    - the processor doesn't have the pins on it, but the pins are connected to the socket. When you place the CPU on top of the socket, you're lining up the pins from the socket into the holes on the CPU
+
+Socket typically used by AMD:
+Pin Grid Array (PGA)
+    - form factor where the processor has the pins and the socket has the holes
+
+A single socket architecture on desktop motherboards can only support one physical processor.
+A multi-socket can have multile CPUs or processors installed on the motherboard.
+
+Socket types:
+    Intel Desktop Socket:
+    - LGA 2011
+    - LGA 1151
+    - LGA 2066
+
+    AMD Desktop Socket:
+    - AM2
+    - AM3
+    - AM4
+
+CPU Features
+------------
+
+Simultaneous Multithreading (SMT)/Hyper-Threading
+- Single stream of instructions is being sent by a software application to a processor
+- Manufacturers developed a way to allow software to run multiple parallel threads at the same time
+- Only works to a certain point and the software has to be able to use it and understand it to be able to tell the system to use multiple threads at the same time
+
+Symmetric Multiprocessing (SMP)
+- traditional workstations and servers have multiple processors
+- you motherboard must have multiple sockets and then multiple CPUs installed. All the processors need to be the same type and speed. And the underlying OS has to understand how to use more than one processor. This wasn't very useful in desktops and laptops because most OSs coudn't do this.
+
+Because most operating systems didn't know how to handle multiple sockets or multiple processors on a given motherboard, manufacturers started creating a multi-core package.
+- single CPU with multiple processors inside
+- to the OS, it looks like a single CPU, because it is. But this single package, delegates work to the cores within
+
+Virtualization: emulate hardware that doesn't really exist. This is achieved via one of the following:
+- VT (Intel)
+- AMD-V (AMD)
+
+Both of the above provide processor extensions to support virtualization (hardware assisted virtualization).
+Virtualization - the ability to have a computer pretend that it's running multiple other computers inside of itself. It allows running multiple systems on a single physical host
+
+There's a second level of virtualization hardware support in some modern processors:
+- Extended Page Table (EPT) (Intel)
+- Rapid Virtualization Indexing (RVI) (AMD)
+
+Both of the above are considered second level address translation (SLAT) features of software virtualization that are supported by that hardware processor to allow better virutal memory management and give increased performance of memory inside a virtual machine.
+
+Motherboard Connections
+-----------------------
+
+Labeled image: https://i.ebayimg.com/images/g/URwAAOSwp6xhnarF/s-l1600.jpg
+
+CPU Sockets: There's a square with a little lever. Remember that if the CPU is Pin Grid Array (PGA and used by AMD), the CPU will have pins and the socket will have holes. If the CPU is Land Grid Array (LGA used by Intel), the CPU will have holes and the socket will have pins. The lever is used to lock the CPU in place.
+
+Memory Sockets: Long strips. They're large sockets.
+
+Mainboard power: To the right (near the edge) of the memory sockets, is the mainboard power. This connects a cable to the power supply and will supply all the voltage needed for all the components on the motherboard except the processor socket.
+
+CPU Power: In the top left is an 8-pin CPU power socket. The CPU needs a lot of power, which is why it gets its own power socket. This connects directly to the power supply.
+
+Case Fan Power: There are 4-pin lines all around the motherboard for various fans.
+
+USB Header Port: below the mainboard power, is USB jumper to provide USB directly to the end user.
+
+SATA Ports: Found below the USB header port near the bottom right.
+
+Power LED Connector: Bottom right, lights up red or green when case is powered on.
+
+USB Header Port: To the left of the power LED connector is a different style of USB header port. This has a different pin out and goes to a USB port cluster on the front of the case.
+
+More USB jumpers to the left.
+
+Audio Header Port: Bottom left. 10-pin area with one missing so you know which way to connect the adapter.
+
+PCIe x1: Above these. Expansion card slots.
+
+Expansion Cards
+---------------
+
+5 types but two main types (first two):
+1. PCIe (PCI Express)
+2. Mini PCIe (Mini PCI Express (for small form factor))
+3. PCI
+4. PCI-X
+5. AGP
+
+PCI
+===
+
+- 32-bit expansion card
+- Developed in the early 1990s to provide expansion slots for things like network cards, video cards, and audio cards, modems, and storage host controllers
+- maximum bus speed of 33 MHz or 133 MBps
+    - This is calculated by taking the 32-bit bus - which tells you how many bits can be pushed across at a given time - and divide it by 8 to get the number of bytes (4). With a 33 MHz bus speed (33,000,000 cycles per second), I can send 33,000,000 * 4 bytes every second = 133,000,000 bytes per second (132,000,000?)
+- Before PCI there was ISA that worked on 8-bit and 16-bit computers but that's not relevant anymore
+
+PCI-X
+=====
+
+- 64-bit expansion card (133 MHz)
+- older card that you won't find much
+- there's also PCI-X 2.0 which has speeds from 266 MHz up to 533 MHz
+- PCI-X was backwards compatible with PCI, which caused problems because people would mix and match PCI-X and PCI, which would cause all of them to be bottlenecked by the slower card
+- PCI and PCI-X are used for networking cards and audio cards
+
+Accelerated Graphics Port (AGP)
+===============================
+
+- Dedicated port that could only be used for video graphics cards
+- quite popular in late 1990s and early 2000s
+- PCIe replaced this
+- Multiple flavors with different power requirements and different speeds
+    - AGP 1x
+    - AGP 2x
+    - AGP 4x
+    - AGP 8x
+
+PCIe (PCI Express (Peripheral Component Interconnect Express))
+==============================================================
+
+- connects to the bus to get data to and from the motherboard for external devices
+- replaces PCI, PCI-X, and AGP
+- different sizes, the number following the ``x`` tells you how long the bus is and indicates how much data can be pushed at a given time
+    - PCIe x1
+        - used for:
+            - modems
+            - network cards
+            - wireless cards
+            - input/output devices
+            - audio cards
+    - PCIe x4
+    - PCIe x8
+    - PCIe x16
+        - usually used for graphics cards because they support a large amount of data and very fast speeds
+- PCIe bus is determined by the motherboard and its form factor
+- There are multiple versions of PCIe
+    - PCIe 1.0
+    - PCIe 2.0
+    - PCIe 3.0
+    - PCIe 4.0
+    - PCIe 5.0
+- All PCIe slots provide 25 watts of power
+- PCIe x16 card slot provides up to 75 watts of power for dedicated graphics card use
+- up-plugging is when you puta smaller card in a larger slot, which you can do!
+- down-plugging is when you put a larger card in a smaller slot, which you can do (but not recommended due to worse performance)
+
+Mini PCIe
+=========
+
+- standard PCIe card with smaller form factor
+- used inside of laptops, specifically for wireless networking
+
+Expansion Cards
+===============
+
+- used to add functions or ports not supported by default as an integrated part of your motherboard
+    - things like:
+        - video cards
+        - sound cards
+        - capture cards
+        - network interface cards
+
+Video Card/Graphic Adapter
+--------------------------
+
+- gives quality signal for monitors
+- come with a Graphics Processing Unit (GPU)
+    - specialized processor designed to accelerate graphics rendering
+    - dedicated high speed memory
+        - embeds the memory to give aditional capability to offload from the system (so it doesn't have to rely on system memory)
+- graphical ports
+    - installed outside of the card
+        - Thunderbolt
+        - DisplayPort
+        - HDMI
+
+Video Capture Card
+------------------
+
+- takes video signals and processes them inside the computer
+- a graphics card is concerned with displaying an image whereas a video capture card is concerned with capturing the displayed image
+- used for recording footage and for security devices
+
+Sound/Audio Card
+----------------
+
+- gives better output through audio
+
+Network Interface Card (NIC)
+----------------------------
+
+- many shapes and sizes
+
+Riser Card
+----------
+
+- an expansion of expansions
+- special type of expansion card on a motherboard that has a dedicated slot (if your motherboard supports it)
+- a circuit board that plugs in to the motherboard to provide additional expansion slots
+- plugs in orthogonally to the board and is good for small cases
+- something that would normally be placed vertically into the system is now horizontal

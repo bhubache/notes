@@ -1,0 +1,187 @@
+System Memory
+-------------
+
+Random Access Memory (RAM): used to load applications and files into a non-persistent and fast storage area
+
+Addressing Memory
+-----------------
+
+RAM is a solid state device and is electronic, making it a lot faster than a mechanical drive that has to spin and find the correct location.
+
+Addressing memroy is the processor reaching the files inside RAM.
+
+A memory controller sits between the memory and CPU. In between the memory controller and CPU is a bus, which is simply a pathway to transfer data. The memory controller is like a traffic cop, directing the CPU how to access different parts of the memory.
+
+The bus has two pathways:
+1. for data that can send and receive information
+2. for addresses that helps determine where in the memory the data is located
+
+The width of the data pathway (data bus) determines how much information can be transferred with each clock cycle. Most modern computers have a 64-bit wide data bus.
+The width of the address bus is either 32-bit or 64-bit. This is determined by how many locations the CPU can keep track of.
+
+32-bit (x86): 4 billion address locations (4 GB of data)
+64-bit (x64): 184 quintillion address locations (16 EB of data)
+
+Memory Modules
+--------------
+
+A module is just a stick of memory (I think).
+The type of memory you can use is determined by the motherboard and its form factor.
+You should check the memory's:
+- type
+- size (size being the amount of storage like 4 GB, 8 GB, etc.)
+- speed
+
+Most modern motherboards can use single banks, which allows you to put any size of module in any slot and mix and match.
+Older motherboards use paired bank, which requires installation of banks in pairs.
+
+Type
+====
+
+the version of Dual Data Rate (DDR): most common type of memory
+- DDR 3
+- DDR 4
+- DDR 5
+
+Legacy systems may have Rambus Dynamic Random Access Memory (RDRAM).
+
+Speed
+=====
+
+Memory speed used to be measured in nanoseconds. But they got so fast that all RAM appeared to be pretty much equal in speed ranging from 1 - 5 nanseconds.
+So we started to measure it based on bus speed.
+    - for example, if you have PC133 memory, it operates at a bus speed of 133 MHz
+Most modern memory measured in throughput
+    - calculated based on the bus speed and the width of the data bus
+
+RAM Overtime
+============
+
+1. Dynamic RAM (DRAM)
+    - oldest type of memory that requires frequent refresh
+2. Static RAM (SRAM)
+    - Solved the issue of the constant refresh, but was expensive
+    - because it's so expensive, it's only used in small amounts like in:
+        - L1, L2, and L3 CPU cache
+        - hard disk buffers
+        - LCD screen buffers
+3. Synchronous DRAM (SDRAM)
+    - first memory module that operates at the same speed as the motherboard bus
+    - common naming scheme examples:
+        - PC66 (66 MHz bus)
+        - PC133 (133 MHz bus)
+        - PC266 (266 MHz bus)
+4. Double Data Rate Synchronous Dynamic Random-Access Memory (DDR SDRAM)
+    - transfers data 2 times per clock cycle
+    - Doubles the transfer speed of an SRAM module (184-pin connector)
+5. DDR2 SDRAM
+    - higher latency but has faster access to the external bus (240-pin connector)
+    - PC2-4200
+        - 4200 MB/s (4.2 GB/s)
+6. DDR3 SDRAM
+    - runs at a lower voltage and at a higher speed than DDR2 (240 keyed pin connector)
+    - higher latency
+    - PC3-10600
+        - 10600 MB/s
+        - 10.6 GB/s
+    - throughput is 6.4 to 17 GB/s with a maximum module size of 8 GB per memory module
+7. DDR4
+    - 12.8 to 25.6 GB/s of throughput
+    - 32 GB per module
+8. DDR 5
+    - 38.4 to 51.2 GB/s of throughput
+    - 128 GB per module
+
+Each version of DDR is keyed differently, so you can't put a DDR5 memory module into a DDR4 slot.
+A mix and match of modules with different speeds is possible as long as they are the same type. But keep in mind that the slower speed will be a bottleneck, causing them all to be at the slowest speed.
+
+Small Outline Dual In-Line Memory Module (SODIMM)
+=================================================
+
+- used for smaller devices such as laptops and all-in-ones
+- still classified as DDR3, DDR4, or DDR5
+- SODIMM PC4-16000 (DDR4 SODIMM module)
+    - 16,000 MB/s
+    - 16 GB/s
+
+Multi-channel Memory
+--------------------
+
+- Uses two different memory modules at the same time to increase the performance and throughput
+- if I'm using single-channel memory, this means I'm using one 64-bit data pathway (data bus) between the processor, memory controller, and RAM modules
+- if I have two different modules and operate them in dual-channel mode, I can have two 64-bit pathways working together to essentially give me a 128-bit pathway
+    - this interleaving gives increased performance that's **more** than just doubling your speed
+
+Four main types of multi-channel memory
+1. single-channel
+    - one memory module on one bus
+    - if you have a 64-bit data bus, you'll have 64 bits sent to and from the processor every clock cycle
+2. dual-channel
+    - requires two memory modules and two memory slots on the motherboard
+    - if you have two 64-bit data buses, you'll have 128 bits sent to and from the processor every clock cycle
+3. triple-channel
+    - requires three memory modules and three memory slots on the motherboard
+    - if you have three 64-bit data buses, you'll have 192 bits sent to and from the processor every clock cycle
+4. quad-channel
+    - requires four memory modules and four memory slots on the motherboard
+    - if you have four 64-bit data buses, you'll have 256 bits sent to and from the processor every clock cycle
+
+The number of memory slots does not tell you what multi-channel configuration is supported. You have to consult the manual.
+
+ECC Memory
+----------
+
+ECC stands for Error Correcting Code
+
+Non-Parity Memory
+=================
+
+- Standard memory that does not check for errors and allows data to be put in or taken out
+    - inexpensive to manufacture
+    - higher speed than parity memory
+
+Parity Memory
+=============
+
+- performs basic error checking and ensures the memory contents are reliable
+- every byte has an associated parity bit
+    - 9 bits
+    - 8 data bits
+    - 1 parity bit
+    - parity bit is set at write time
+    - it gets calculated and compared when you read from the memory to determine if any of the bits have changed since the data was last written
+    - limited to checking single bit errors so if two bits were to change, the parity check could pass
+    - an example please:
+        - 00000000
+        - the sum of all the bits is 00000000 which gives me 0 for my parity bit
+        - now if I read this from memory and I see there are 8 zeros, I add them up and get 0, which matches my parity bit of 0 so we pass the parity check!
+    - another example please:
+        - 00000001
+        - summing all the bits gets 1 for my parity bit
+        - if something happened causing 00000001 to be changed to 00000000, then parity check would fail when the data is next read!
+        - you wouldn't know which bit changed but that one of them did
+    - another example please:
+        - let's say the value you wrote was 00000001
+        - and something happened and it got changed to 01010001
+        - then sum of the bits is 1 so the parity check would actually pass, despite the data being incorrect!
+- 90% of errors are single bit errors, so this is quite helpful
+- but if you're doing something where data reliability is really important, like running servers for a bank, we want something better than parity, introducing ECC
+
+ECC detects and corrects an error.
+You do give up some performance for a boost in reliability.
+To identify and correct an error it uses:
+buffered / registered memory:
+- additional hardware (register) between memory and CPU
+- the system requires buffering or registering the data to reduce the electrical load
+- the motherboard and CPU have to support ECC modules
+
+Virtual Memory (Page File)
+==========================
+
+Space on a hard drive that is allocated by the OS and pretends to be memory.
+
+The name differs by OS:
+- Windows: Page File
+- Linux Unix/Mac: Swap Space
+
+When you're dealing with virtual memory, the operating system will assign memory locations to different processes in 4 KB-sized chunks, called pages. The memory controller is able to move things into and out of physical memory using these pages.

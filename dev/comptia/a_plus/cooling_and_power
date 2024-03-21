@@ -1,0 +1,136 @@
+All components generate heat.
+
+thermal load: heat from different components inside the computer
+- we want to reduce thermal load to keep components safe
+
+passive cooling: doesn't rely on moving parts or power
+    - one example is a heat sink
+        - finned metal device that radiates heat away from the processor. The increased surface area is what allows for faster cooling
+
+thermal paste: compound that ensures heat transfer by eliminating air gaps
+
+active cooling: uses a fan to cool down the heat from the device
+
+remove excess dust from fans every three to six months.
+
+Passive Cooling
+===============
+
+- heat sink
+- thermal paste
+
+Active Cooling
+==============
+
+- case fan
+- processor fan
+
+
+Liquid Cooling
+--------------
+
+Can dispense a lot more heat with less power and noise than air cooling. This is because water and liquids are more effective coolants than air convection.
+
+Two types:
+1. closed loop system
+    - cooling of a single component
+    - not as popular as open loop
+2. open loop system
+    - cooling of different components
+
+There's a pump for expanding and contracting to push the liquid through water looping tubing. There's a reservoir to store liquid. There's a water block/water bracket that sits on top of different components like your CPU. It contains liquid and absorbs the heat from the component. The heated liquid is sent to teh radiator, which removes the heat from the liquid to make it cool again.
+
+Power Supply Unit (PSU)
+-----------------------
+
+Give all the components the direct current they need to operate. A wall outlet provides alternating current (AC) from 110 - 120 volts in America and Europe and Asia usually 230 - 240 volts. Computers need much lower voltage and DC.
+
+alternating current: cycles between positives and negatives repeatedly. In the United States, 60 Hz power is used, meaning 60 times per second, the voltage cycles between +120 volts and -120 volts and back again.
+
+The main purpose of a power supply is to deliver DC low voltage power to all components inside the PC when receiving an AC power supply.
+
+A transformer with a series of regulators and filters are used within a power supply to convert the AC to DC (down to 12 volts or less).
+
+Modular PSU / Modular Power Supply Unit
+- allows to unhook the connectors and detach from the unit (rather than them being soldered on)
+
+some motherboards support multiple power supplies so that in the scenario where one fails, the other can keep things up and running.
+
+Power Supply Connectors
+-----------------------
+
+Main Board / Motherboard Adapter
+================================
+
+- provides power to the motherboard
+- originally with the ATX standard, you had a 20-pin connector
+- this was expanded to 24 pins with ATX 12V (ATX 12 volt power supply)
+- you'll often get a 20+4 pin connector which is a 20 pin connector coupled with a 4 pin connector. This way, you can use either a 24-pin or 20-pin connector (to support old and new PSUs)
+- you'll mostly see just 24-pin now though because hardly any motherboards support a 20-pin connector
+
+Processor Power / CPU Power
+===========================
+
+- has a 4, 6, or 8-pin connector (most modern CPUs use 8 pins)
+
+PCIe Adapter Card
+=================
+
+PCIe power connectors are used to provide extra power to a graphics card (because with power GPUs, the 75 watts provided by the PCIe x16 slot isn't enough). These will be 6 or 8-pin connectors.
+
+SATA Power Connector
+====================
+
+- used to power the SATA drives
+    - CD
+    - DVD
+    - bluray disc
+    - internal hard drive
+- L-shaped 15-pin connector
+    - looks like SATA data cable (which is 7 pins) just longer because it has 15 pins
+
+Molex Connector
+===============
+
+- legacy connector used for IDE and PATA hard disks, CDs, and DVD drives
+
+Y Connector
+===========
+
+- one connector that can support multiple devices (in case you need more connectors)
+- takes one connector and turns it in to two
+- there are also types that convert from one type of connector to another
+    - like PCIe adapter y connectors that go from PCIe into Molex (so PCIe into 2 Molex connectors)
+
+Input and Output Voltages
+-------------------------
+
+most power supplies will support multi-voltage outputs to allow it to work with differing voltages used around the world.
+
+Voltage Sensing / Dual Voltage Power Supplies
+=============================================
+
+- modern PSUs detect the outlet and converts it into the voltage of DC
+
+The voltages needed by components within a computer are:
+- +3.3 VDC
+- +5 VDC
+- +/- 12 VDC
+    - + 12 VDC contributes most to the decision for what PSU to buy as it's the most commonly used in a system
+
+rail: wire that provides current at a particular voltage
+    - so a wire or cable providing 12 volts within a computer would be called a 12 VDC rail (12 volt DC rail)
+
+Wattage Rating
+--------------
+
+Power supply's outpt capacity or capability.
+
+If you want to upgrade your system (or are building a system), you need to make sure you get a power supply that has enough wattage to support all the components.
+
+Amperage to Wattage:
+A x V or I x V
+
+You also need to consider how much power is being drawn out of a wall outlet. Just because you bought a power supply that supports 500 W, that doesn't mean that's the wattage being drawn by the system. PSUs are not 100% efficient. Most operate at 70% - 75% efficiency, or up to 80% if you get a high quality energy star model.
+
+A 500 watt power supply that is 70% efficient will draw 714 watts from the outlet in order to deliver 500 watts to the system. The other 30% is lost as heat.
