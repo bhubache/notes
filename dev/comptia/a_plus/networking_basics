@@ -1,0 +1,365 @@
+Networking Basics
+-----------------
+
+Networks make the connections between machines
+
+Networking Hardware
+-------------------
+
+Network components can be things like:
+- Network Interface Cards (NICs)
+    - Provides an ethernet connection to the network
+    - can be:
+        - integrated into motherboard
+        - added as an expansion card
+        - added external peripheral using a USB connection
+- Hubs
+    - older piece of technology
+    - has a number of different ports between 4 and 48 ports
+    - each computer connects to a single port on the hub
+    - uses a wired interface with RJ45 connectors
+    - 10 to 100 Mb/s
+    - if more than one machine needs to interact with the hub at the same time (which can't be done), they will all wait a random amount of time and try again. This is to try and avoid collisions. The machine with the shortest wait time ends up going first (assuming no collisions happen again) and the other systems must wait until the first machine is done
+        - this slows down the entire network connection
+    - another problem is that everybody can see what is going on because they're all on the same hub. The hub broadcasts a piece of information to every port so it'll essentially say "hey, I have a message for Jason, and everyone that isn't jason just covers their ears". But all the devices, if they wanted to, could listen to it
+    - Network clients know who is being targeted by using a MAC address which is its own address on the local area network
+    - Summary of problems with hub:
+        1. Collisions
+        2. People could uncover their ears and listen to traffic
+- Unmanaged and managed switches
+    - created to overcome the issues with hubs
+    - smart hubs that remember the ports that are connected to them
+    - between 4 and 96 ports
+    - multiple people can talk at one time because the switch doesn't need to broadcast to every port
+    - unmanaged
+        - performs its functions without requiring any configuration
+        - easy to setup
+        - generally for small networks (4 port or 8 port switches)
+    - managed
+        - performs its functions with configuration
+        - increased security
+        - MAC filtering
+        - Virtual Local Area Networks
+- Wireless access points
+    - device that allows wireless devices to connect to a wired network
+    - converts radio frequency signals into copper electrical signal
+- Routers
+    - connects different networks together
+    - makes intelligent forwarding decisions from one network to the next based on its logical address called its Internet Protocol (IP) address
+        - IPv4
+        - IPv6
+    - in a home this would be used to connect your local area network to your Internet Service Provider (ISP)
+- Firewalls
+    - scans and blocks traffic that enters or leaves the network
+    - Unified Threat Management (UTM) often used as well nowadays that contains fireware features
+        - spam guards
+        - anti-virus solutions
+- Patch panels
+    - device that allows cable network jacks from a wall into a central area
+    - cables plug in to patch panel which connects to the switch
+    - you can wear out the ports on the switch by plugging and unplugging, which requires you to replace the entire switch, which is expensive. A patch panel is a lot less expensive
+- Power Over Ethernet (PoE) devices
+    - supplies electrical power from a switch port over an ordinary data cable to a power device (PD)
+        - a PD could be something like a camera
+    - provides power **and** data to the device to eliminate the need to have an electrical outlet next to the device
+    - 3 varieties:
+        - 802.3af
+            - oldest version
+            - allows least amount of power to be drawn (13 W)
+        - 802.3at (PoE+)
+            - allows power devices to draw up to 25 W
+        - 802.3bt (PoE++)
+            - Type 3
+                - 51 W
+            - Type 4
+                - 73 W
+    - 3 things required to use:
+        1. switch that supports PoE at once of the three levels
+            - a power injector can be used if you don't have a switch that supports PoE
+                - it plugs directly into the outlet and an ethernet cable can connect it with the switch
+        2. proper cabling in place for support (Cat 6 or above)
+        3. power device to use the data and power coming over the ethernet cable
+- Cable modems
+    - device that translates coaxial cable signals into radio frequency waves
+    - a converter taking in the signal off the coaxial cable, converting it into electrical impulses that can then be sent out over a normal ethernet network using copper unshielded twiested pair cabling that can then go into a router or gateway
+- Digital Subscriber Line (DSL) modems
+    - device that translates coaxial cable signals into phone lines
+- Optical Network Terminal (ONT)
+    - terminates fiber connection
+    - converts light signals coming off the fiber to electrical for a copper unshielded twisted pair cable that goes into the router or gateway
+- Software Defined Networks (SDN)
+    - way of virtualizing the network hardware
+
+Network Types
+-------------
+
+- Personal Area Network (PAN)
+    - smallest type of network of wired or wireless network and covers the least amount of area
+    - about 10 ft or less
+    - Examples:
+        - bluetooth
+        - USB
+- Local Area Network (LAN)
+    - connects components within a limited distance
+    - about 100 meters
+    - usually a small office or one floor of an office building
+    - Ethernet
+        - IEEE 802.3
+    - Wi-Fi
+        - IEEE 802.11
+- Campus Area Network (CAN)
+    - connects LANs that are building-centric across a university, industrial park, or business park
+    - up to a few miles
+- Metropolitan Area Network (MAN)
+    - connects scattered locations across a city or metro area
+    - up to about 25 miles
+- Wide Area Network (WAN)
+    - connects geographically disparate internal networks and consists of leased lines or Virtual Private Networks (VPNs)
+    - worldwide coverage
+- Wireless Local Area Network (WLAN)
+    - a wireless distribution method for two or more devices that creates a local area network using wireless frequencies
+- Storage Area Network (SAN)
+    - provisions access to configurable pools of storage devices that can be used by application servers
+    - Internet SCSI (iSCSI)
+    - Fibre Channel (FC)
+- Small Office, Home Office (SoHo) LAN
+    - uses a centralized server or simply provides clients access to local devices like printers, file storage, or the internet
+
+Internet of Things
+------------------
+
+A global network of appliances and personal devices that have been equipped with sensors, software, and network connectivity to report state and configuration
+These devices should be separated and segmented off from the business network
+
+4 categories:
+1. Hub and control systems
+    - central point of communication for automation and controlling of IoT devices
+    - Amazon echo
+2. Smart devices
+    - IoT endpoints that connect back to the central hub or control system to provide some kind of automation or function
+    - smart lightbulb
+3. Wearables
+    - designed as accessories that can be worn
+    - smart watch
+4. Sensors
+    - measures things like sound, temperature, humidity
+
+Twisted Pair Cables
+-------------------
+
+Most popular Local Area Network cabling technology
+
+8 individually insulated wires with each twisted into a pair (making 4 pairs)
+The more twists you have within an inch of the cable, the better protection that cable has from electromagnetic interference
+The higher the category number, the more twists for each cable, so the higher the speed
+
+2 types:
+1. Unshielded Twisted Pair (UTP)
+    - No metal in the shielding
+2. Shielded Twisted Pair (STP)
+    - Each pair is wrapped in metal foil
+    - and braided metallic shield wrapping around all four pairs
+    - more expensive than UTP
+
+both UTP and STP:
+- can go about 100 meters
+- use the same type of connectors
+
+2 connector types:
+1. RJ45
+    - most common
+    - plastic 8-pin connector (typically only 4 pins used)
+    - data networks
+2. RJ11
+    - 6-pin connector (typically only 2 pins used)
+    - phone networks
+
+RJ stands for Registered Jack
+    - carries voice or data which specifies the standards a device needs to meet in order to connect to the phone or data network
+
+Bandwidth
+    - the theoretical measure of how much data can be transferred from a source to its destination
+
+Throughput
+    - the actual measure of how much data is successfully transferred from a source to its destination
+
+Ethernet Standard
+    - a designation given to a particular category that provides the ability to understand the bandwidth and the cable type to be used
+
+There are different categories:
+- Cat 5 (Fast Ethernet)
+    - Standard: 100BASE-TX (TX stands for twisted pair fast ethernet)
+    - Bandwidth: 100 Mbps
+    - Distance: 100 meters
+- Cat 5e (Gigabit Ethernet)
+    - Standard: 1000BASE-T
+    - Bandwidth: 1000 Mbps
+    - Distance: 100 meters
+- Cat 6
+    - Standard: 1000BASE-T | 10GBASE-T
+    - Bandwidth: 1000 Mbps | 10 Gbps
+    - Distance: 100 meters | 55 meters
+- Cat 6a
+    - Standard: 10GBASE-T
+    - Bandwidth: 10 Gbps
+    - Distance: 100 meters
+- Cat 7
+    - Standard: 10GBASE-T
+    - Bandwidth: 10 Gbps
+    - Distance: 100 meters
+- Cat 8
+    - Standard: 40GBASE-T
+    - Bandwidth: 40 Gbps
+    - Distance: 30 meters
+
+Keep cable runs under 70 meters from the IDF to the office
+
+Straight-Through Cable (Patch Cable):
+    - contains the exact same pinouts on both ends of the cable
+
+568A and 568B standard pinouts
+    - 568B preferred when wiring jacks inside buildings
+
+Patch Cable
+    - DTE to DCE
+    - DCE to DTE
+
+Crossover Cable
+    - DTE to DTE
+    - DCE to DCE
+    - swaps the send and receive pins on the other end of the cable when the connector and its pinouts are created
+        - one end has 568A and the other end has 568B
+        - workstation to workstation or switch to switch
+    - Medium Dependent Interface Crossover (MDIX) (many modern switches have)
+        - an automated way to electronically simulate using a crossover cable
+
+3 kinds of constructions:
+1. Direct burial
+    - cable rating that specifies that a cable has a stronger sheathing and jacket than can withstand more extreme weather conditions
+2. Plenum
+    - a special coating put on a UTP or an STP cable that provides a fire-retardant chemical layer to the outer insulating jacket
+    - fire resistant
+    - less dangerous fumes released if cable does catch fire
+    - use these for any area cables are that you cannot see, such as within:
+        - ceilings
+        - walls
+        - raised floors
+        - air ducts
+3. Non-plenum
+
+Optical Cabling
+---------------
+
+Fiber Optic Cable:
+    - uses light from an LED or laser to transmit information through a thin glass fiber
+    - immune to electromagnetic interference
+    - greater usable range
+    - greater data capacity
+    - the limiting factor(s) is now things like:
+        - switches
+        - routers
+        - end-user devices
+    - two main drawbacks:
+        - expensive
+        - difficult to work with
+
+Categorize optic cables like so:
+- Single Mode Fiber (SMF)
+    - used for longer distances and has smaller core size which allows for only a single mode of travel for the light signal
+    - core size is 8.3 - 10 microns in diameter
+    - more expensive than multimode
+- Multimode Fiber (MMF)
+    - used for shorter distances and has larger core size which allows for multiple modes of travel for the light signal
+    - core size is 50 - 100 microns in diameter
+    - up to 2 kilometers
+
+4 connector types:
+1. Subscriber Connector (SC)
+    - low cost
+    - durable
+    - easy to install
+    - "stick and click"
+2. Straight Tip Connector (ST)
+    - relatively low cost
+    - easy to use
+    - older
+    - "stick and twist"
+3. Lucent Connector (LC)
+    - newer and smaller version of SC
+    - also has stick and click
+    - "love connector" because transmit and receive sides are almost always attached together
+4. Mechanical Transfer Registered Jack (MTRJ)
+    - very popular with networking devices because of it smaller form factor
+
+Coaxial Cabling
+---------------
+
+One of the oldest categories of copper media that is still used in networking
+
+Plastic jacket surrounds a braided metal shielding which surrounds a metallic shield which surrounds an insulator which surrounds the center core
+
+2 main places to find coaxial cables:
+1. RG-6
+    - often used to connect local cable company to your home
+    - very thick
+2. RG-59
+    - used inside your home
+
+2 commonly used connectors:
+1. F-type
+    - most common
+2. BNC
+
+twinaxial cable
+    - similar to coaxial cable but uses two inner conductors to carry the data instead of just one
+
+Networking Tools
+----------------
+
+Snip/Cutter
+    - used to cut a piece of cable off a larer spool or run of cable
+
+Cable Stripper
+    - used to strip off the end of the cable and prepare it for attachment to a connector
+
+Cable Crimper
+    - used to attach the connector to the end of the cable
+
+Cable Tester
+    - used to verify the continuity of each of the eight individual wires inside of a twisted pair cable
+
+Wire Mapping Tool
+    - works like a cable tester, but specifically for twisted pair ethernet cables
+
+Cable Certifier
+    - used to determine a cable's category or data throughput
+
+Punch-Down Block
+    - terminates the wires and strips off excess insulation and extra wires that are no longer needed
+
+Tone Generator/Toner Probe
+    - used to generate a tone on one end of the connection and use the probe to audibly detect the wire connected on the other side
+
+Loopback Adapter/Device
+    - facilitates the testing of simple networking issues
+
+Tap
+    - connects directly to the cable insfrastructure and splits or copies those packets for analysis, security, or general network management
+
+Wireless Analyzer
+    - ensures proper coverage and prevents overlap between wireless access point coverage zones and channels
+
+Building a Cable
+----------------
+
+Showed how to build a cable, it was pretty cool
+
+Wiring the Network
+------------------
+
+Showed punching down the wires
+
+Testing the Network
+-------------------
+
+Fox and Hound testing to find where cut in wire may be or to document network

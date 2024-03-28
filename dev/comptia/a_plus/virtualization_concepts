@@ -1,0 +1,140 @@
+Virtualization
+--------------
+
+Host computer installed with a hypervisor that can be used to install and manage multiple guest operating systems or virtual machines (VMs)
+
+Hardware is referred to as bare metal
+
+
+                                ############  ############
+                                # Guest OS #  # Guest OS #
+                                ############  ############
+
+############  ############      ##########################
+# Guest OS #  # Guest OS #      #       Hypervisor       #
+############  ############      ##########################
+
+##########################      ##########################
+#       Hypervisor       #      #        Host OS         #
+##########################      ##########################
+                                
+##########################      ##########################
+#        Hardware        #      #        Hardware        #
+##########################      ##########################
+
+          Type I                         Type II
+
+Bare metal hypervisor that      Hypervisor runs on top of
+runs directly on the            operating system
+hardward and functions as
+the operating system
+- Hyper-V                       - VMWare Workstation
+- Zen Server                    - VirtualBox
+- ESXi
+- VSphere
+
+2 models to provide virtualized application services:
+1. Server-based (terminal services)
+    - server-based solution that runs the application on servers in a centralized location
+2. Client-based (application streaming)
+    - client-based solution that allows an application to be packaged up and streamed directly to a user's PC
+
+Containerization
+----------------
+
+Operating system's kernel is shared across multiple VMs but the user space for each VM is uniquely created and managed
+Containerization is a type of virtualization applied by a host operating system to provision an isolated execution environment for an application
+
+1. When a physical server crashes, all the organizations hosted on that same server are affected
+2. An organization's failure to secure the virtual environments hosted on a shared server poses a security risk for the other organizations
+3. Hosting all VMs on the same type of hypervisor can also be exploited
+
+Purposes of VMs
+---------------
+
+Hypervisor: manages the distribution of the physical resources of a server to the virtual machines
+
+Hyperconverged Infrastructure: allows for the full integration of the storage, network, and servers without hardware changes
+
+Application Virtualization: Encapsulates computer programs from the underlying OS on which they are executed
+
+Virtual Desktop Infrastructure (VDI): Hosts desktop OSs within a virtualized environment hosted by a centralized server or server farm
+    - really cool example where employee's operating system was virtualized such that each every time they logged off it was destroyed (or at midnight) making it difficult for attacker's to remain persistent on the user's desktop
+
+Sandbox: an isolated environment for analyzing pieces of malware
+
+Cross-Platform Virtualization: allows for the testing and running of software applications for different operating systems
+
+Set up virtual servers in the cloud with proper failover, redundancy, and elasticity
+
+Emulation
+=========
+
+System imitating another system
+
+Resource Requirements
+---------------------
+
+4 main areas of focus:
+1. CPU and its virtualization extensions
+    - Intel uses VT-x
+    - AMD uses AMD-V
+    - There's also Second Level Address Translation (SLAT)
+        - improves the performance of virtual memory when running multiple virtual machines on a single physical host
+        - Intel calls this Extended Page Table (EPT)
+        - AMD calls this Rapid Virtualization Indexing (RVI)
+2. System memory
+    - Amount of physical memory installed on a physical server
+3. Storage
+4. Networking
+
+NIC teaming configuration allows multiple cards for higher speeds
+
+Security Requirements
+---------------------
+
+VM Escape
+=========
+
+Threat attempts to get out of an isolated VM and send commands to the underlying hypervisor
+Easier to perform on a type II hypervisor than a type I hypervisor
+
+For protection ensure that your guest OS, host OS, and hypervisor are patched and up-to-date
+
+VM Hopping
+==========
+
+Threat attempts to move from one VM to another on the same host
+
+For protection ensure that your guest OS, host OS, and hypervisor are patched, up-to-date, and securely configured
+
+Sandbox Escape
+==============
+
+A sandbox separates running processes and programs to mitigate system failures or software vulnerabilities
+The escape occurs when an attacker circumvents sandbox protections to gain access to the protected OS or other privileged processes
+
+For protection ensure that your guest OS, host OS, and hypervisor are patched, up-to-date, have strong edpoint software protection, and have limited extensions or add-ons
+
+Other Topics
+============
+
+A live migration migrates the virtual machine from one host to another while its running
+Because a live migration occurs over the network, ensure that live migration only occurs on a trusted network or utilizes encryption
+
+Data remnants are leftover pieces of data that may exist in the hard drive which are no longer needed
+    - encrypt virtual machine storage location
+    - destroy encryption key
+
+VM sprawl is the uncontrolled deployment of virtual machines
+
+Configuring Virtual Machines
+----------------------------
+
+He setup a VM with VirtualBox
+
+Securing Virtual Machines
+-------------------------
+
+- Use disk encryption of for VM
+- Don't share folders between host OS and guest OS

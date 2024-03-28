@@ -1,0 +1,205 @@
+Hard Disk Drive (HDD)
+---------------------
+
+A form of mass storage device
+mass storage device: non-volatile storage device that holds teh data when the system is powered down at a large scale (GB or TB)
+two types:
+1. Internal
+    - device that is placed inside the computer case or tower
+    - this can include:
+        - hard disk drives
+        - solid state devices
+        - optical drives
+        - tape backup drives
+        - old school floppy disk drives
+2. External
+    - device that is placed outside the computer case or tower and connected to an external port
+    - this can include:
+        - USB hard drive
+        - eSATA drive
+
+Generally there are 3 sizes:
+1. 2.5"
+2. 3.5"
+3. 5.25"
+    - reserved for optical drives, backup tape drives, and floopy disc drives
+
+2.5" and 3.5" are reserved for internal HDDs and SSDs
+
+You can use an adapter to put a smaller device into a larger bay
+
+A hard disk drive stores data on a metal or glass platter that is coated with a magnetic substance. The magnetic substance can be charged with different electrical currents to create data on those by storing 1s or 0s on the magnetic substance.
+The platters are accessed via a read/write head that is moved by an actuator. It works similarly to a record player. The platter spins around and the read/write head on the actuator can access different parts of the drive. Because of this, if you have data stored on the inside or outside of the drive, the actuator may have to move quite far, causing the seek time to be quite large.
+
+The platter can be logically divided into tracks and sectors:
+track/cylinder: one circle (or ring) going around the platter
+sector: like a wedge going from the center to the perimeter. has a width of about 512 bytes
+
+seeking or retrieving data: movement of the actuator and the read/write head to read the data
+
+So the faster you can spin a hard drive, the faster you can access data. This speed is measured in revolutions per minute (RPM)
+
+4 basic types of speeds:
+1. 5400 RPM
+    - slowest model (budget or low-end workstations and PCs)
+2. 7200 RPM
+    - faster performance (modern computers)
+3. 10,000 RPM
+    - high-performance drives (gaming PCs)
+4. 15,00 RPM
+    - highest RPM and highest cost, but provides excellent performance
+
+Solid state drives are higher performing than hard disk drives, so why would someone by an HDD?
+    - typically because of the lower cost
+
+Another thing to consider with hard disk drives is its buffer size:
+- internal buffer or cache on a hard disc drive (8 MB to 256 MB) to cache data for increased performance
+
+You have to connect a hard disk drive to the motherboard via a cable, most commonly a SATA Data Cable (two cables):
+1. 7-pin Data Connector
+    - L-shape connector
+2. 15-pin Power Cable
+    - L-shape connector
+
+Small Computer System Interface (SCSI)
+- supports either 7 or 15 devices in a daisy chain
+
+Solid State Drive (SSD)
+-----------------------
+
+- Uses flash memory technology to implement persistent mass storage
+- no mechanical components
+- much faster and more durable and smaller than HDDs
+
+3 main form factors:
+1. 2.5"
+    - used when replacing an HDD inside of a laptop or small desktop
+2. 1.8"
+    - used inside of small laptops
+3. M2
+    - doesn't resemble a traditional hard drive at all
+    - like a memory chip, small, sleek, and light to use in a laptop
+
+Older SSDs rely on SATA connectors (7+15 pin SATA)
+- 2.5" or 1.8" rely on SATA connections
+
+mSATA: smaller form factor that allows an SSD to be used as an adapter card that can be plugged into a combined data and power port on the motherboard. This operates at the same speed as a regular SATA connection, so it'd be slower than the true speed of the SSD
+
+Because of the bottleneck with mSATA, Non-Volatile Memory Express (NVMe) was created:
+- a communication protocol used with the M2 form factor to plug directly into the motherboard
+
+There's also PCIe if your SSD has the form factor to fit. These slots are faster than SATA but slower than NVMe
+
+RAID
+----
+
+Redundant Array of Independent Disks:
+- combination of multiple physical hard disks that is recognized by the operating system. Creates one logical hard drive in the OS.
+
+There are many kind of RAID but here's what you may see on the exam:
+- RAID 0
+    - striping: placing a piece on each disk, alternating evens on one side odds on the other
+    - 2 disks working together, each of them holds half the data
+    - greater for speed but provides no data redundancy
+    - no loss of space on the disks
+- RAID 1
+    - mirroring and redundancy
+    - 2 disks
+    - everything put on disk 0 is also put on disk 1
+    - provides full redundancy
+    - only have the disk space of one disk available because the other is for storing copies
+    - failure resistant
+    - fault tolerant
+- RAID 5
+    - redundancy through parity
+    - 3 or more disks
+    - say I a file called B, half gets put on disk 0 and it's called B1, the other half gets put on disk 1 and it's called B2, then a calculation is performed, and the result is put on disk 2 called Bp. If I lose one disk. I can take the remaining half of the file and the parity and make up the file. It's kind of like algebra: 2 + x = 5, we know x must equal 3
+    - with 3 disks, only losing 33% of disk space (because one disk is being used for parity) as opposed to the 50% loss with RAID 1
+    - one of the most common types
+    - can lose one disk and keep operating
+    - failure resistant
+    - fault tolerant
+- RAID 6
+    - striping with dual parity
+    - 4 disks
+    - can lose 2 disks and keep operating
+    - fault tolerant
+- RAID 10 (pronounced RAID one zero)
+    - mirroring + striping
+    - 4 disks
+    - a RAID of RAIDs
+    - 2 RAID 1s placed inside of a RAID 0 configuration
+    - 2 fully redundant mirrors so 50% disk space loss
+    - disaster tolerant
+
+RAIDs can be classified as:
+- Failure resistant: protection against the loss of erased data
+- Fault tolerant: RAID can function even when a component fails
+- Disaster tolerant: RAID with two independent zones with full data access
+
+RAIDs provide redundancy and high-availability
+
+Removable Storage
+-----------------
+
+Any storage device that can be moved from computer to computer without having to open up the case and remove it from the inside
+
+Hot-Swappable
+- capable of being removed or replaced without disruption or powering off the device
+    - USB
+    - Thunderbolt
+    - eSATA
+
+SATA does support hot-swapping but only if you enable Advanced Host Controller Interface (AHCI) in the BIOS:
+- technical standard developed by Intel that allows hot-swappable capability with SATA devices
+
+External hard drives are just internal hard drives wrapped in a drive enclosure:
+
+A flash drive/thumb drive is usually called a USB drive. But that's just because the USB type A connector is the most common. They have thunderbolt, lightning connectors, or others.
+
+Memory Cards (most common types):
+- SD
+- MiniSD
+- MicroSD
+- CompactFlash
+- Memory Stick
+    - proprietary protocol used on Sony devices
+
+Optical Drives
+--------------
+
+3 main varieties:
+1. Compact disc (CD)
+    - oldest form of optical drive that stores 74 to 80 minutes of music
+    - 650 - 700 MB
+2. Digital Versatile Disc (DVD)
+    - 4.7 GB or 8.4 GB depending on if your using a standard DVD or dual layer DVD (DL)
+3. Blu-ray Disc (BD)
+    - 25 GB or 50 GB (DL)
+
+3 main types:
+1. Read-only (ROM)
+    - CD-ROM
+    - DVD-ROM
+    - BD-ROM
+2. Write-once (R)
+    - once written to, it cannot be erased
+    - CD-R
+    - DVD-R
+    - DVD+R
+    - BD-R
+3. Write-many/Erasable (RW/RAM/RE)
+    - CD-RW
+    - DVD
+        - DVD-RW
+        - DVD+RW
+        - DVD-RAM
+            - different type of form factor to DVD-RW
+            - typically housed in a cartridge that looks similar to a backup tape
+    - BD-RE
+        - stands for Blu-ray Disc Record Erasable
+
+Speed of optical drives denoted by its X-rating, which is a multiple of its 1X speed.
+- CD: 1X = 150 KB/s
+- DVD: 1X = 1.385 MB/s
+- Blu-ray: 1X = 4.5 MB/s

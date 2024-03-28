@@ -1,0 +1,160 @@
+Wireless Frequencies
+--------------------
+
+3 main ways for spread spectrum wireless transmission:
+1. Direct-Sequence Spread Spectrum (DSSS)
+    - modulates data over an entire range of frequencies using a series of signals known as chips
+    - these chips are more susceptible to electrical and environmental interefence resulting in slower bandwidth
+    - using the entire range of frequencies is suboptimal
+2. Frequency Hopping Spread Spectrum (FHSS)
+    - allows devices to hop between predetermined frequencies
+    - makes it harder to guess where the frequency actually is depending on the algorithm being used by the protocol
+    - reduces the amount of the spectrum available for bandwidth though it does increase security
+    - not relied upon much anymore
+3. Orthogonal Frequency Division MultiPlexing (OFDM)
+    - uses a slow modulation rate with simultaneous transmissions over 52 different data streams
+    - we get more bandwidth
+    - higher data rates while resisting interference because the streams are small chunks
+
+Each band has specific frequencies/channels to avoid overlapping with other signals
+
+Channel
+    - a virtual medium through which wireless networks can send and receive data
+
+For the 2.4 GHz spectrum, there can be 11 or 14 channels depending on where you are in the world due to regulation
+    - United States            | 11 channels | 2401-2473
+    - Almost Rest of the world | 13 channels | 2401-2483
+    - Japan                    | 14 channels | 2401-2495
+
+    - each channel is only around 22 MHz wide which limits the amount of data that can be sent at a given time
+    - the channels overlap a lot because there's only 2473 - 2401 = 72 MHz to share between 11+ channels
+        - channels 1, 6, and 11 avoid overlapping frequencies in the 2.4 GHz range
+
+Newer wireless networks operate in the 5 GHz range where we can use 5.725 - 5.875 GHz
+    - now there's 24 non-overlapping channels
+
+Starting with wireless N networks there's Channel Bonding:
+    - allows for the creation of a wider channel by merging neighboring channels into one
+
+Wireless Standards
+------------------
+
+Standard           | Band              | Bandwidth
+-----------------------------------------------------------------
+802.11a            | 5 GHz             | 54 Mbps
+802.11b            | 2.4 GHz           | 11 Mbps
+802.11g            | 2.4 GHz           | 54 Mbps
+802.11n (Wi-Fi 4)  | 2.4 and 5 GHz     | 150 Mbps/600 Mbps (MIMO)
+802.11ac (Wi-Fi 5) | 5 GHz             | 6.9 Gbps (MU-MIMO)
+802.11ax (Wi-Fi 6) | 2.4, 5, and 6 GHz | 9.6 Gbps (MU-MIMO)
+
+Multiple-Input and Multiple-Output (MIMO)
+    - uses multiple antennas to send and receive more data than it could with a single antenna
+
+Multiple User Multiple input Multiple Output (MU-MIMO)
+    - allows multiple users to access the wireless network and access point at the same time
+
+Radio Frequency Interference (RFI)
+    - occurs when there are similar frequencies to wireless networks in the area
+
+Wireless Security
+-----------------
+
+Pre-Shared Key
+    - both the access point and the client use the same encryption key
+    - scalability becomes an issue
+        - let's say you have 50 employees, every employee is using the same key. If you fire an employee and don't want them to be able to access your network anymore, you'll have to change the key and tell all the the other employees what the new key is
+
+3 main methods for security:
+1. Wired Equivalent Privacy (WEP)
+    - original 802.11 wireless security standard which is an insecure security protocol
+    - uses a static, 40-bit pre-shared key
+        - easy to brute-force
+        - they updated to 64-bit and then 128-bit which solved the key length problem, but there was still another problem
+    - initialization vector
+        - a 24-bit initialization vector (IV) is sent in clear text
+        - if enough of these are caught you can crack the encryption key (can be done in about 2-3 minutes on most modern laptops)
+2. Wi-Fi Protected Access (WPA)
+    - replaced WEP and follows the Temporal Key Integrity Protocl (TKIP)
+    - uses 48-bit initialization vector
+    - added rivest cipher 4 (RC4) for encryption
+    - use a Message Integrity Check (MIC) to confirm data was not modified in transit (man-in-the-middle attach)
+    - added enterprise mode to authenticate users before exchanging keys
+    - WPA is still considered weak by today's standards
+3. Wi-Fi Protected Access 2 (WPA2)
+    - created as part of IEEE 802.11i standard and requires stronger encryption and integrity checking through CCMP
+    - replaced RC4 with Advanced Encryption Standard (AES) to provide additional security by using a 128-bit key or higher
+    - has two modes
+        - pre-shared key for personal mode
+        - centralized authentication for enterprise mode
+            - every user gets a unique username and password
+
+MAC Address Filtering
+    - configures an access point with a listing of permitted MAC addresses (like an ACL)
+    - problem with this is that it's easy to change your MAC address and spoof it
+
+Disabling SSID Broadcast
+    - configures an access point not to broadcast the name of the wireless LAN
+    - SSID stands for Server Set Identifier and its the actual name of your wireless network like Starbucks Guest
+
+Fixed Wireless
+--------------
+
+4 different types of networks:
+1. Wi-Fi (802.11)
+    - creates point to point connections from one building to another over a relatively short distance of a couple hundred meters
+    - uses directional antennas
+2. Cellular
+    - uses a larger antenna and a larger hotspot powered by a power outlet within an office or home
+3. Microwave
+    - creates point to point connection between two or more buildings that have longer distances of about 40 miles
+4. Satellite
+    - a long range and fixed wireless solution that can go for thousands of miles
+    - low earth orbit
+        - requires more satellites to cover the entire planet but gives lower latency speeds
+    - geosynchronous orbit
+        - one satellite can cover a large portion of the earth
+        - higher latency
+        - lower quality
+
+NFC, RFID, IR, and Bluetooth
+----------------------------
+
+- Near Field Communication (NFC)
+    - uses radio frequency to send electromagnetic charge containing the transaction data over a short distance (usually just a few inches)
+    - tap to transfer in smartphones like for mobile payments
+- Radio Frequency Identification (RFID)
+    - a form of radio frequency transmission modified for use in authentication systems
+    - heavily used in inventory tracking systems where an RFID tag is placed on an object and readers identify the object as it moves across its route
+    - also used in an enterprise authentication system
+        - should be used with 2FA
+- Infrared Data (IrDA)
+    - allows two devices to communicate using line of sight communication in teh infrared spectrum
+    - older technology
+    - being line of sight makes it a bit more secure than bluetooth
+    - very low data rate
+- Bluetooth
+    - creates a personal area network over 2.4 GHz to allow for wireless connectivity
+    - replaces infrared for a lot of things
+    - vulnerabilities
+        - bluejacking
+            - sending unsolicited messages to a bluetooth device
+            - to help prevent this, devices should not be in discoverablility mode unless actively connecting to a peripheral. Once that's over, turn off discoverablility mode
+        - bluesnarfing
+            - making unauthorized access to a device via bluetooth connection
+            - an attacker tries to take information from a bluetooth device
+        - blueborne
+            - allows the attacker to gain complete control over a device without even being connected to the target device
+- Tethering
+    - sharing cellular data Internet connection from a smartphone to multiple other devices
+    - only connect to trusted wireless networks
+    - someone could make a hotspot and then look at all the traffic over it
+
+Configuring a Wireless Network
+------------------------------
+
+- Use WPA2 with a good, long, strong pre-shared key
+- disable SSID broadcast
+- enable wireless isolation
+- enable MAC filtering
+- disable WPS setting

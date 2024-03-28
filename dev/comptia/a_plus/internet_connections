@@ -1,0 +1,56 @@
+Internet Service Provider (ISP)
+    - establishes high speed links between their network and clients
+
+Dial-up and DSL
+---------------
+
+- Dial-up
+- Integrated Services Digital Network (ISDN)
+    - supports multiple 64 Kbps channels
+    - older technology designed to carry voice, video, or data over B (bearer) channels
+- Digital Subscriber Line (DSL)
+    - Asymmetric DSL (ADSL)
+        - different speeds of download and upload
+        - max download was about 8 Mbps
+        - max upload was about 1.544 Mbps
+        - maximizes the download and minimizes the uploads
+    - Symmetric DSL (SDSL)
+        - has equal speeds of download and upload
+    - Very High Bit-Rate DSL (VDSL)
+        - has high speeds of download and upload
+        - download of 50 Mbps or more
+        - upload of 10 Mbps or more
+
+Plain Old Telephone Service (POTS)
+    - runs as a dial-up connection and is used on the public switched telephone network (PSTN)
+    - analog connections can be voiced or data converted from ones and zeros
+    - dial-up modems have a maximum bandwidth of 53.3 kb/s
+
+Cable Connections
+-----------------
+
+Cable Modems
+    - uses a cable TV network that is made up of a hybrid fiber-coaxial (HFC) distribution network
+    - transmit and receive over cable television infrastructure
+
+Data-Over-Cable Service Interface Specifications (DOCSIS)
+    - specific frequency ranges used for upstream and downstream transmissions
+    - upstream 5 MHz to 42 MHz
+    - downstream 50 MHz to 860 MHz
+
+Fiber Connections
+-----------------
+
+Fiber To The Curb (FTTC)
+    - funs a fiber optic cable from an internet provider access point to a curb
+
+Fiber To The Premises (FTTP)
+    - fiber optic that connects directly to a building and connects to an optical network terminal (ONT)
+
+Optical Network Terminal (ONT)
+    - physical devices that convert optical signals to electrical signals
+
+Cellular Connections
+--------------------
+
+The ``G`` in 3G, 4G, 5G, etc. refers to the generation of cellular technology being used

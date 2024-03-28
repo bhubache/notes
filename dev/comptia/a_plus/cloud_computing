@@ -1,0 +1,168 @@
+Cloud Computing
+---------------
+
+Practice of using a network of remote servers hosted on the internet
+
+Characteristics of the Cloud
+----------------------------
+
+- High availability
+    - services experience very little downtime when using the cloud
+        - highly reliable
+        - very fault tolerant
+    - percentage of uptime versus downtime
+        - the gold standard inside of networks is known as 5 9s or, 99.999% uptime/availability
+        - should only have 5 minutes and 15 seconds of downtime in a year
+- Scalability
+    - ability to increase the number of items in a system at a linear rate or less than a linear rate
+        - let's say I have 100 users using my system and it costs $10. If I put 200 users on my system, it should cost $20 or less
+    - vertical scaling (scaling up)
+        - increasing the power of the existing resources in the working environment (a particular server or node)
+            - if you have a cloud-based server with two virtual CPUs, you can vertically scale by increasing it to 4 virtual CPUs
+    - horizontal scaling (scaling out)
+        - adding additional resources to help handle the extra load being experienced (adding additional servers or nodes)
+- Elasticity
+    - ability to quickly scale up or down
+    - can also think about it as the system's ability to handle changes to demand in real time
+    - using automation and orchestration with a lot of VMs
+- Metered utilization
+    - being charged for a service on a pay per use basis
+    - metered service is like your water bill, you pay for the amount you use each month. Low if you don't use a lot of water but high if you do
+    - measured service charge in small increments. An example is a phone plan where you'll pay a monthly fee for a set amount of usage. If you go above that you'll have to start paying more. So, you could be paying for more than you're using
+- Shared resources
+    - ability to minimize the costs by putting VMs on other servers
+- File synchronization
+    - ability to store data which can then spread to other places depending on configuration
+
+Cloud Deployment Models
+-----------------------
+
+6 types:
+1. public
+    - systems and users interact with devices on public networks, such as the internet and other clouds
+    - can be an inexpensive way for an organization to gain a required service quickly and efficiently
+    - google drive
+2. private
+    - systems and users only have access with other devices inside the same private cloud or system
+    - the governement has a private cloud
+3. hybrid
+    - combination of private and public clouds
+4. community
+    - collaborative effort where infrastructure is shared between several different organizations with common service needs
+    - like taking multiple private clouds and connecting them together to lower the costs
+5. multitenancy
+    - allows customers to share computing resources in a public or private cloud
+    - large gain in efficiency because most organizations don't use all the capacity of a single server or set of servers
+6. single tenancy
+    - assigns a particular resource to a single organization
+    - tend to be less efficient than multitenancy and more expensive
+    - while not stated explicitly in the video, I imagine these are more secure than multitenancy
+
+Cloud Service Models
+--------------------
+
+on-premise: needs to procure hardware, software, and personnel necessary to run the organization's cloud. Gives control of all physical and logical access to servers
+hosted: third-party service provider that provides all the hardware and facilities needed to maintain a cloud solution. Typically a multitenant deployment. Data may be exposed to other servers. Important to understand the provider's:
+    - authentication and authorization mechanisms
+    - redundancy and fault tolerance measures
+    - storage location and location-based laws
+
+3 main cloud service models:
+1. Software as a Service (SaaS)
+    - a complete solution
+        - application
+        - data
+        - runtime
+        - middleware
+        - OS
+        - virtualization
+        - servers
+        - storage
+        - networking
+    - Examples:
+        - office 365 by microsoft
+        - docs and sheets by google workspace
+        - turbotax
+2. Platform as a Service (PaaS)
+    - SaaS without the application or data portion because you'll be handling those portions yourself
+    - a complete solution
+        - runtime
+        - middleware
+        - OS
+        - virtualization
+        - servers
+        - storage
+        - networking
+    - Examples:
+        - DION training (the company making this udemy course) is creating their own learning management system but they don't want to deal with all the underlying hardware, networking, storage, OS layers etc. so they Platform as a Service as their solution through AWS
+3. Infrastructure as a Service (IaaS)
+    - PaaS without runtime, middlware, OS
+        - virtualization
+        - servers
+        - storage
+        - networking
+    - means of provisioning IT resources such as servers, load balancers, and storage area network components when needed
+    - you get the benefits of elasticity but don't have to deal with the headache of managing all the hardware yourself
+
+Virtual Desktop Infrastructure (VDI)
+------------------------------------
+
+Hosts desktop OSs within a virtualized environment hosted by a centralized server or server farm
+separates the personal computing environment from the physical computer. The virtual desktop can then be accessed through a thin client or web browser
+the server is going to perform all the application processing and data storage
+
+If the server goes down or your internet goes down, you can't do any work because you can't access the server
+
+3 models for VDI:
+1. centralized
+    - hosts all the desktop instances on a single server or server farm
+2. hosted/Desktop as a Server (DaaS)
+    - maintained by a service provider and provided to the end user as a service
+    - Amazon workspaces
+    - VMWare horizon air
+    - citric zen desktop
+3. Remote Virtual Desktop Model
+    - copies the desktop image to a local machine prior to being used by the end user
+    - eliminates the need for constant network connections
+
+Cloud Storage Services
+----------------------
+
+Cloud Storage Applications
+==========================
+
+Amount of space on a cloud-based server as a file storage
+
+File Synchronization
+====================
+
+Ability to synchronize from different devices using a single account
+
+Content Delivery Networks (CDN)
+===============================
+
+Network of servers that locates the nearest server to minimize delay or download time
+
+Software Defined Network (SDN)
+------------------------------
+
+Enables the network to be intelligently and centrally controlled, or programmed, using software applications
+- can be changed automatically be the network itself using automation and orchestration
+
+Several pieces to consider:
+- Application layer
+    - focuses on the communication resource requests or information about the network as a whole
+- Control layer
+    - uses the information from the applications and decides how to route a data packet on the network
+    - how traffic should be prioritized, secured, and where it should be forwarded
+- Infrastructure layer
+    - contains the network devices that receive information about where to move the data and perform those movements
+- Management plane
+    - used to monitor traffic conditions and the status of the network
+
+The layers allow the network to be decoupled from the underlying hardware
+
+Using the Cloud
+---------------
+
+Walked through basic setup of Amazon Lightsail
