@@ -33,3 +33,165 @@ IPv4
         - 172.21.243.67
     - dotted-decimal notation
     - each number is called an octet because it represents an 8-bit number (0 - 255)
+    - total of 32 bits of addressable space
+    - two portions specified with IPv4 address
+        1. Network
+        2. Host
+    - the subnet mask - which looks a lot like an IPv4 address - identifies the network and host portions
+        - 255 (all 1s in binary) indicates the octet of the IPv4 address is part of the network portion
+        - 0 (all 0s in binary) indicates the octet of the IPv4 address is part of the host portion
+
+              |1st octet|2nd octet|3rd octet|4th octet|
+--------------|---------|---------|---------|---------|
+Dotted-decimal|   192   |   168   |    1    |    4    |
+--------------|---------|---------|---------|---------|
+Binary digits |11000000 |10101000 |00000001 |00000100 |
+--------------|---------|---------|---------|---------|
+Subnet mask   |   255   |   255   |   255   |    0    |
+--------------|---------|---------|---------|---------|
+Subnet mask   |11111111 |11111111 |11111111 |00000000 |
+--------------|-----------------------------|---------|
+              |          Network bits       |Host bits|
+-------------------------------------------------------
+
+Using the above table 192.168.1 make up the network portion because the corresponding octets in the subnet mask are all 1s. This means 192.168.1.X are all addressable by the same local network. The 4th octet exclusively makes up the host portion because it is the only octet in the subnet mask to have all 0s. When you reference 192.168.1.4, that is a particular host. When you reference 192.168.1, that is the network that can contain up to 254 devices (why not 256?).
+
+IPv4 Classes
+============
+
+--------------------------------------------------------------------------------------------------------
+|Class | 1st Octect Value | Default Subnet Mask |   Possible Hosts   |            Description          | CIDR Notation
+|------|------------------|---------------------|--------------------|---------------------------------|
+|  A   |     1 - 127      |   255 | 0 | 0 | 0   |    16.7 million    |                                 |   /8
+|      |                  |    N  | H | H | H   |  (256 x 256 x 256) |                                 |
+|------|------------------|---------------------|--------------------|---------------------------------|
+|  B   |    128 - 191     |  255 | 255 | 0 | 0  |       65,536       |                                 |   /16
+|      |                  |   N  |  N  | H | H  |     (256x256)      |                                 |
+|------|------------------|---------------------|--------------------|---------------------------------|
+|  C   |    192 - 223     | 255 | 255 | 255 | 0 |        256         |                                 |   /24
+|      |                  |  N  |  N  |  N  | H |                    |                                 |
+|------|------------------|---------------------|--------------------|---------------------------------|
+|  D   |    224 - 239     |           -         |          -         |  Reserved for multicast routing |
+|------|------------------|---------------------|--------------------|---------------------------------|
+|      |    240 - 255     |           -         |     268 million    |                                 |
+|  E   |                  |                     |    (reserved for   |                                 |
+|      |                  |                     |       research)    |                                 |
+--------------------------------------------------------------------------------------------------------
+
+multicast address
+    - a logical identifier for a group of hosts in a computer network
+    - think about it like a group message in texting. The group may have a name (which would be like the multicast address), and when you send a message, all members get a copy of that message
+
+182.168.1.4
+255.255.255.0
+    - there's a default subnet mask for a class C network
+    - IPv4 address's 1st octet is in the range 192 - 223, it is a class C address
+    - so we consider this to be classful and call it a classful mask
+    - a classful mask is the default subnet mask for a given class of IP addresses
+
+Classless Inter-Domain Routing (CIDR)
+    - allows for borrowing some of the host bits and reassigning them to the network portion
+    - helps to break down the network into smaller portions with fewer hosts
+    - let's say I have a class C network for my home. The default subnet mask is 255.255.255.0, which allows for 256 hosts to be connected. If I want to break this down into 4 smaller networks to get 64 hosts per network. To do this, I can change the subnet mask to 255.255.255.192
+    - Introducing CIDR notation
+        - Example 1
+            - IPv4: 192.168.1.4
+            - Subnet mask: 255.255.255.0
+            - CIDR (slash) notation: 192.168.1.4/24
+        - Example 2
+            - IPv4: 192.168.1.4
+            - Subnet mask: 255.255.255.192
+            - CIDR (slash) notation: 192.168.1.4/26
+
+
+Public (Routable) and Private (Non-routable) IPv4 Addresses
+===========================================================
+
+- Public (Routable)
+    - can be accessed over the Internet and is assigned to the network by an Internet service provider
+    - globally managed by the Internet Corporation for Assigned Names and Numbers
+- Private (Non-Routable)
+    - can be used by anyone at any time, but only with their local area network
+    - include those that start with 10, 172, or 192
+    - if you have a private IP, how can you access the internet?
+        - Network Address Translation (NAT) allows for routing of private IPs through a public IP
+
+Private IP Ranges
++++++++++++++++++
+
+Class | Starting Value |           IP Range            | Possible Hosts
+---------------------------------------------------------------------------------------
+  A   |       10       |  10.0.0.0 - 10.255.255.255    | 16.7 million (256 x 256 x 256)
+  B   | 172.16 - 172.31| 172.16.0.0 - 172.31.255.255   | 1.05 million (16 x 256 x 256)
+  C   |    192.168     | 192.168.0.0 - 192.168.255.255 | 65,536 (256 x 256)
+
+2 Categories of special IPs to cover
+1. Loopback (127.0.0.1)
+    - creates a loopback to the host and is often used in troubleshooting and testing network protocols on a system
+    - 127.0.0.0/8, or, 16.7 million IP addresses to be used as internet host loopback addresses
+        - waste of space because only 1 is really needed. When it was invented, people didn't anticipate needing the extra ~ 16.7 million addresses for anything else
+    - 127.0.0.1 is just the most commonly used
+        - also called localhost
+2. Automatic Private IP Addresses (APIPA)
+    - used when a device does not have a static IP addres or cannot reach a DHCP server
+    - dynamically assigned by the OS
+    - 169.254.0.0 - 169.254.255.255
+    - if you ever see any IP in this range, it means there is something wrong with the DHCP process
+
+Discover Offer Request Acknowledge (DORA)
+    - if this process for determining the system's IP address during boot time fails, the system will automatically pick an APIPA
+
+
+Assigning IPv4 Addresses
+------------------------
+
+- Static
+    - manually type the IP address for the host, its subnet mask, default gateway, and DNS server
+    - impractical on large enterprise networks
+    - cons
+        - time consuming
+        - prone to error
+- Dynamic
+    - dynamic allocation of IP addresses
+
+Four components of a fully configured client:
+1. IP address
+2. Subnet mask
+3. Default gateway
+4. Server address
+
+Domain Name System (DNS)
+    - converts the domain names used by a website to the IP address of its server
+    - the internet version of a phone book
+
+Windows Internet Name Service (WINS)
+    - identifies NetBIOS systems on a TCP/IP network and converts those NetBIOS names to IP addresses
+
+4 different methods for dynamically assigning of critical addressing information:
+1. Bootstrap Protocol (BOOTP)
+    - oldest and least used
+    - dynamically assigns IP addresses and allows a workstation to load a copy of boot image to the network
+    - mapped a system's MAC address to its IP in a database
+2. Dynamic Host Control Protocl (DHCP)
+    - assigns an IP based on an assignable scope or addresses and provides the ability to configure other options
+    - because you can assign based on a scope, you could limit the assignable addresses to 192.168.1.100 - 192.168.1.200
+    - each IP is leased for a period of time and returns to the pool when the lease expires
+        - if a computer is still using the IP, it can just say so, and the DHCP server can lease it out for another period so the computer can keep using it
+    - the IP Address Management manages the IPs being assigned and returned over time
+3. Automatic Private IP Addressing (APIPA)
+    - used when a device does not have a static IP address or cannot reach a DHCP server
+    - allows for the quick configuration of a LAN without the need for a DHCP server
+    - cannot communicate outside the LAn or with non-APIPA devices
+4. Zero Configuration (ZeroConf)
+    - new technology that provides the same features as APIPA and more
+    - can assign an IPv4 link-local address to a client
+    - can resolve computer names to IP addresses without the need for DNS by using mDNS (or multicast domain name service)
+    - perform service discovery on a network
+
+Dynamic Host Configuration Protocol (DHCP)
+------------------------------------------
+
+provides an IP address to every machine on the network and elimiinates configuration errors
+
+scope
+    - list of valid IP addresses available for assignment or lease to a client computer or endpoint device on a given subnet
