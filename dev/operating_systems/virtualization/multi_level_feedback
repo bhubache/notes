@@ -1,0 +1,142 @@
+Multi-Level Feedback Queue (MLFQ)
+
+There are two things the MLFQ tries to address:
+1. optimize turnaround time
+    - accomplished by running shorter jobs first
+        - the issue with this is that the OS doesn't generally know how long a job will run for which is the knowledge that SJF and STCF require
+2. optimize response time
+    - algorithms like RR reduce response time but are terrible for turnaround time
+
+So, given that we in general do not know anything about a process, how can we build a scheduler to achieve these goals?
+How can the scheduler learn, as the system runs, the characteristics of the jobs its running, and thus make better scheduling decisions?
+
+MLFQ: Basic Rules
+-----------------
+
+In our treatment, the MLFQ has a number of distinct queues, each assigned a different priority level. A job that is ready to run is in a single queue. A job with higher priority is chosen to run. There may be more than one job on a given queue and thus have the same priority. For this situation, we will use RR scheduling.
+
+Rule 1
+======
+
+If Priority(A) > Priority(B), A runs (B doesn't)
+
+Rule 2
+======
+
+If Priority(A) = Priority(B), A & B run in RR
+
+The key to MLFQ scheduling lies in how the scheduler sets priorities. Rather than giving a fixed priority to each job, the MLFQ varies the priority of a job based on its observed behavior.
+    - A job that repeatedly relinquishes the CPU while waiting for input from the keyboard will be kept at a high priority because this is how an interactive process would likely behave
+    - A job that uses the CPU intensively for long periods of time will be kept at a low priority
+
+There needs to be a way to change a processes priority though, otherwise processes lower than the highest priority level will never (except if those highest level processes complete) run.
+
+Attempt #1: How To Change Priority
+----------------------------------
+
+Keep in mind that we have different types of jobs making up the workload:
+- interactive jobs that are short-running and may frequently relinquish the CPU
+- longer-running "CPU-bound" jobs that need a lot of CPU time but where response time isn't important
+
+Introducing allotment:
+    - the amount of time a job can spend at a given priority leve before the scheduler reduces its priority
+
+let's assume for now that the allotment is equal to a single time slice.
+
+Rule 3
+======
+
+When a job enters the system, it is placed at the highest priority (the topmost queue)
+
+Rule 4a
+=======
+
+If a job uses up its allotment while running, its priority is reduced (moves down one queue)
+
+Rule 4b
+=======
+
+If a job gives up the CPU before the allotment is up, it stays at the same priority level and its allotment is reset
+
+With these rules, MLFQ assumes that an incoming job is a short job and gives it the highest priority. If it actually is short, it will run quickly and complete. If it is not short, it will slowly move down the queues.
+
+Example 1: A Single Long-Running Job
+++++++++++++++++++++++++++++++++++++
+
+Assume a time slice of 10 ms, an allotment time of 10 ms, and 3 priority queues (Q2, Q1, Q0)
+The job first enters the highest priority queue (Q2). Once the allotment time is reached, the scheduler reduce's the job's priority by one and so the queue is placed in Q1. After another allotment time has passed, the job is placed in the lowest priority queue (Q0) where it remains.
+
+Example 2: Along Came A Short Job
++++++++++++++++++++++++++++++++++
+
+We have two jobs:
+- A: a long-running CPU-intensive job
+- B: a short-running interactive job
+
+Assume that A has been running for some time and then B arrives. B's run-time is 20 ms. Also keep the assumptions from the previous example.
+
+If A has been running for some time it will be in the lowest priority queue when B arrives. When B arrives, it is placed in the highest priority queue (Q2). The 10 ms allotment time passes and B is placed in Q1 (still higher priority than A). It runs for another 10 ms allotment time and completes and is removed from the queue. Now A is back to being the only process in the MLFQ and resumes running in Q0.
+
+Example 3: What About I/O?
+++++++++++++++++++++++++++
+
+Recall that rule 4b states that if a process gives up the processor before using up its allotment, we keep it at the same priority level (because it is likely an interactive process expecting short response time).
+
+If Job B needs the CPU for 1 ms before performing an I/O operation. Each time B runs on the CPU, it makes the I/O request before using up its allotment time and so, B is kept in the highest priority queue.
+
+Problems With Our Current MLFQ
+++++++++++++++++++++++++++++++
+
+Starvation
+^^^^^^^^^^
+
+If there are too many interative jobs in the system, they will combine to consume all CPU time and long-running jobs will never receive any CPU time (they starve).
+
+Susceptible To Someone Gaming The Scheduler
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Before the allotment is used, issue an I/O operation and thus relinquish the CPU, allowing you to remain in the same queue and gain a higher percentage of CPU time.
+
+A Program May Change Its Behavior Over Time
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+What was initially CPU-bound may transition to a phase of interactivity. There's currently no way to increase the priority of a process.
+
+Attempt #2: The Priority Boost
+------------------------------
+
+There needs to be a way to periodically boost the priority of all the jobs in the system. Let's do something simple:
+
+Rule 5
+======
+
+After some time period S, move all the jobs in the system to the topmost queue
+
+Solves two problems:
+1. Processes are guaranteed not to starve
+2. If a CPU-bound job has become interactive, the scheduler treats it properly once it has received the priority boost
+
+It's difficult to find an appropriate value for S.
+
+Attempt #3: Better Accounting
+-----------------------------
+
+How do we prevent gaming of our scheduler?
+
+Let's rewrite rules 4a and 4b to the following single rule:
+
+Rule 4
+======
+
+Once a job uses up its time allotment at a given level (regardless of how many times it has given up the CPU), its priority is reduced
+
+Tuning MLFQ And Other Issues
+----------------------------
+
+How To Parametrize A Scheduler?
+===============================
+
+1. How many queues should there be?
+2. How big should the time slice per queue be?
+3. How big should the allotment time per queue be?
+4. How often should priority be boosted in order to avoid starvation and account for changes in behavior?

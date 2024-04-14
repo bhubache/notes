@@ -1,0 +1,81 @@
+How To Effectively Virtualize The CPU With Control
+--------------------------------------------------
+
+The OS must virtualize the CPU in an efficient manner while retaining control over the system. To do so, both hardware and operating-system support will be required. The OS will often use a judicious bit of hardware support in order to accomplish its work effectively.
+
+We could allow a program to run directly on the CPU, which would make it run quickly. It would look like this:
+
+1. OS creates an entry for the process list
+2. OS allocates memory for the program
+3. OS loads the program memory
+4. OS sets up stack
+5. OS clears registers
+6. OS executes the program's entry point
+7. Program executes and returns
+8. OS frees memory of the process
+9. OS removes the process from the process list
+
+However, there are a couple problems with this approach.
+
+Problem #1: Restricted Operations
+=================================
+
+What if the process wishes to perform some kind of restricted operation? There needs to be a way to do this without simply giving the process control over the whole system.
+
+Introducing the following two processor modes
+    - user mode
+        - a process is restricted in what it can do such as being unable to issue I/O requests
+        - applications do not have full access to hardware resources
+        - to perform a privileged operation, a program would issue a system call
+            - to execute a system call, a program must execute a special trap instruction. This instruction simulatenously jumps into the kernel and raises the privilege level to kernel mode. The system can now perform whatever privileged operations are needed (if allowed). When finished, the OS calls a special return-from-trap instruction which returns into the calling user program while simulataneously reducing the privilege level back to user mode
+            - but how does the trap know which code to run inside the OS?
+                - the kernel sets up a trap table at boot time which occurs in kernel mode. The OS tells the hardware what code to run when certain exceptional events occur: this code is called a trap handler (is this right?)
+            - to specify an exact system call, a system-call number is usually assigned to each system call. User code is responsible for placing the desired system-call number in a register or at a specified location on the stack. The OS, when handling the system call inside the trap handler, ensures the number is valid and executes the corresponding code. This indirection is a form of protection as the user doesn't specify an exact address to jump to.
+    - kernel mode
+        - the operating system (or kernel) runs in this mode
+        - a process can do whatever it likes
+
+Problem #2: Switching Between Processes
+=======================================
+
+If a process is running on the CPU the OS isn't running (because only one process can run at a time). So how can the OS possibly regain control of the CPU so that it can switch between processes?
+
+A Cooperative Approach: Wait For System Calls
++++++++++++++++++++++++++++++++++++++++++++++
+
+One approach is where the OS trusts processes to behave reasonably and periodically give up the CPU so that the OS can decide to run some other task. A process gives control to the OS when making a system call or whenver it does something illegal (like dividing by zero (a trap is generated)). This isn't ideal though because a process (either malicious or just full of bugs) could end up in an infinite loop and never make a system call. You're only option would be to reboot the machine!
+
+A Non-Cooperative Approach: The OS Takes Control
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+A timer interrupt!
+A timer device can be programmed to raise an interrupt every so many milliseconds. When the interrupt is raised, the currently running process is halted and a pre-configured interrupt handler in the OS runs. Now the OS has control.
+    - During boot time the OS must
+        - tell the hardware what code to run when the timer interrupt occurs
+        - start the timer
+    - the hardware has the responsibility of saving enough state of the program that was running such that a subsequent run-from-trap instruction will be able to resume the running program correctly
+
+Saving and Restoring Context
+++++++++++++++++++++++++++++
+
+When the OS regains control, it has to decide between continuing to run the currently-running process or switch to a different one. If the decision is to switch, the OS executes a:
+    - context switch
+        - this is conceptually simple. All the OS has to do is save a few register values for the currently-running process (onto its kernel stack for example) and restore a few for the soon-to-be-running process (from its kernel stack)
+
+Summary
+=======
+
+- The CPU should support at least two modes of execution:
+    1. a restricted user mode
+    2. a privileged (non-restricted) kernel mode
+- Typical user applications run in user mode, and use a system call to trap into the kernel to request operating system services
+- The trap instruction:
+    - carefully saves register state
+    - changes the hardware status to kernel mode
+    - jumps into the OS to a pre-specified destination: the trap table
+- When the OS finishes servicing a system call, it returns to the user program via another special return-from-trap instruction, which:
+    - reduces privilege
+    - returns control to the instruction after the trap that jumped into the OS
+- The trap tables must be setup by the OS at boot time and make sure they can't be readily modified by user programs. This is all part of the limited direct execution (LDE) protocol which runs programs efficiently but without loss of OS control
+- A non-cooperative approach to CPU scheduling called the timer interrupt is used to ensure a user program does not run forever
+- A context switch is when the OS, during a timer interrupt or system call, switches from running the current process to a different one

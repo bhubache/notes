@@ -1,0 +1,171 @@
+The Crux: How To Develop A Scheduling Policy (remember this is high level and mechanisms are low level)
+How should we develop a basic framework for thinking about scheduling policies?
+What are the key assumptions?
+What metrics are important?
+What basic approaches have been used in the earliest of computer systems?
+
+Workload Assumptions
+--------------------
+
+We will (for now) make the following (mostly unrealistic) assumptions about the processes (sometimes collectively called the workload), sometimes called jobs, that are running in the system:
+1. Each job runs for the same amount of time
+2. All jobs arrive at the same time
+3. Once started, each job runs to completion
+4. All jobs only use the CPU (i.e., no I/O is performed)
+5. The run-time of each job is known
+
+Scheduling Metrics
+------------------
+
+A metric is just something that we use to measure something.
+Let's use a single metric: turnaround time
+    - the time at which the job completes minus the time which the job arrived in the system
+    - T_turnaround = T_completion - T_arrival
+    - because we are for now assuming all jobs arrive at the same time, T_arrival = 0 and hence T_turnaround = T_completion
+
+The turnaround time is a performance metric. Another possible metric (which is not performance based) is fairness. Performance and fairness are often at odds in scheduling. A scheduler may optimize performance at the cost of preventing a few jobs from running, decreasing fairness.
+
+First In, First Out (FIFO)
+--------------------------
+
+The most basic algorithm we implement for this (also known as First Come, First Served (FCFS)).
+Simple and therefore easy to implement.
+
+Simple FIFO Example
+===================
+
+If you have three jobs that each take 10 seconds to complete? What is the average turnaround time?
+
+20 seconds
+
+Each job will run sequentially, taking 10 seconds each. Let's say the order is job A, job B, and lastly job C.
+
+Job A:
+    - T_arrival = 0
+    - T_completion = 10
+    - T_turnaround = 10 - 0 = 10
+Job B:
+    - T_arrival = 0
+    - T_completion = 20
+    - T_turaround = 20 - 0 = 20
+Job C:
+    - T_arrival = 0
+    - T_completion = 30
+    - T_turaround = 30 - 0 = 30
+
+(10 + 20 + 30) / 3 = 20
+
+Why FIFO Is Not That Great
+==========================
+
+Let's no longer assume that each job runs for the same amount of time. What kind of workload would make FIFO perform poorly?
+
+Long jobs running before short jobs!
+
+If job A took 100 seconds to complete and job B and C still took 10 seconds, the average turnaround time (assuming the same order) is
+(100 + 110 + 120) / 3 = 110 seconds
+
+This issue is more generally referred to as the convoy effect, where relatively-short potential consumers of a resource get queued behind a heavyweight resource consumer.
+
+Shortest Job First (SJF)
+------------------------
+
+With this policy (discipline), B and C are ran (either B followed by C or C followed by B) and lastly A is ran because it takes the longest. The average turnaround time is now
+(10 + 20 + 120) / 3 = 50 seconds
+
+Let's now relax the assumption that jobs arrive at the same time. What problems does this lead to?
+
+If T_arrival for job A is 0 and T_arrival for B and C is 10, we would get the following schedule:
+
+Job A:
+    - T_arrival = 0
+    - T_completion = 100
+    - T_turnaround = 100 - 0 = 10
+Job B:
+    - T_arrival = 10
+    - T_completion = 110
+    - T_turaround = 110 - 10 = 100
+Job C:
+    - T_arrival = 10
+    - T_completion = 120
+    - T_turaround = 120 - 10 = 110
+
+(10 + 100 + 110) / 3 = 103.33 seconds
+
+How can we address this?
+
+Shortest Time-to-Completion First (STCF) / Preemptive Shortest Job First (PSJF)
+-------------------------------------------------------------------------------
+
+We need to relax assumption 3 (that jobs must run to completion). Whenever a new job enters the system, the STCF scheduler determines which of the remaining jobs (including the new one) has the least time left and schedules that one. So, the schedule would look like this:
+
+Job A:
+    - T_arrival = 0
+    - T_completion = 120
+    - T_turnaround = 120 - 0 = 120
+Job B:
+    - T_arrival = 10
+    - T_completion = 20
+    - T_turaround = 20 - 10 = 10
+Job C:
+    - T_arrival = 10
+    - T_completion = 30
+    - T_turaround = 30 - 10 = 20
+
+(120 + 10 + 20) / 3 = 50 seconds
+
+A New Metric: Response Time
+---------------------------
+
+The introduction of time-shared machines with users sitting at a terminal and demanding interactive performance gave rise to a new metric: response time.
+
+T_response = T_firstrun - T_arrival
+
+We are assuming the job produces a response instantaneously.
+
+If Job A arrives at time 0 and Jobs B and C arrive at time 10, the response time for the jobs is as follows:
+    - Job A: 0
+        - because it is the only job in the queue and therefore has the shortest time to completion so is started immediately
+    - Job B: 0
+        - upon arrival at 10 seconds, it has the shortest time to completion so is started immediately
+    - Job C: 10
+        - upon arrival at 10 seconds (we're kind of assuming B arrives just before C), B has the shortest time to completion and so C must wait for B to complete
+
+Average response time of (0 + 0 + 10) / 3 = 3.33 seconds
+
+How can we build a scheduler that is sensitive to response time?
+
+Round Robin (RR)
+----------------
+
+Instead of running jobs to completion, RR runs a job for a time slice (sometimes called a scheduling quantum) and then switches to the next job in the queue, repeating this until all jobs are finished. RR is sometimes called time-slicing. The length of a time slice must be a multiple of the timer-interrupt period.
+
+If Jobs A, B, and C all arrive at time 0 and all takes 5 seconds to complete, assuming a time-slice of 1 second, the response time would be:
+(0 + 1 + 2) / 3 = 1 second
+
+If SJF were used the average response time would be:
+(0 + 5 + 10) / 3 = 5 seconds
+
+The shorter the length of the time slice, the better the performance of RR under the response-time metric. However, making the time slice too short is problematic because the cost of context switching starts to be impactful and can dominate overall performance. Thus, there's trade-off: making the time slice long enough to amortize the cost of switching without making it so long than the system isn't responsive enough.
+
+What about the turnaround time metric?
+With RR, the average turnaround time is
+(13 + 14 + 15) / 3 = 14 seconds
+
+Incorporating I/O
+-----------------
+
+Let's relax the assumption that programs won't perform I/O.
+
+When I/O is initiated, the scheduler has a decision to make, because the currently running process is blocked waiting for the I/O to complete. So, the scheduler will probably schedule another job at that time.
+The scheduler also has a decision to make when the I/O completes. An interrupt is raised and the OS runs, moving the process that issued the I/O from the blocked state to the ready state. From here it could decide to move it to running or start another job.
+
+Let's say we have two jobs: A and B that each need 50 ms of CPU time. However, every 10 ms, A issues an I/O request (assume that I/Os take 10 ms), whereas B simply uses the CPU for 50 ms. If the scheduler just runs A and then B, A would run for 90 ms (50 ms seconds of CPU time interlaced with 40 ms of I/O time) and B would run for 50 ms immediately after. This has a total run time of 140 seconds.
+
+A common approach is to treat each 10 ms sub-job of A as an independent job. So, with STCF, you would schedule A's first sub-job. Once it has completed (is making an I/O request), start B. When the I/O request for A completes, the next sub-job of A is queued and switched to (because it's time to completion is less than B). This way, there is no wasted CPU time and the total run time is 100 ms.
+
+No More Oracle
+--------------
+
+We relax our last assumption: that the scheduler knows the length of each job.
+We'll see soon that we can use the recent past to predict the future using a scheduler known as the multi-level feedback queue.

@@ -1,0 +1,25 @@
+The ``fork()`` System Call
+--------------------------
+
+used to to create a new process.
+the created process is almost an exact copy of the calling process. The new process comes into life right at the ``fork`` call.
+Assuming only one process is running and there's only one CPU, a call to fork forces scheduling to occur (because only one process can run on a CPU at a time). This scheduling is enforced by the OS and effectively makes the execution of a program that called fork non-deterministic. (I'm guessing if you new the exact state of the machine and the algorithm used for scheduling then it would be deterministic)
+
+The ``wait()`` System Call
+--------------------------
+
+wait for a child process to finish. The allows the code to run synchronously and make it deterministic. There are cases where wait returns before the child has exited though.
+
+The ``exec()`` System Call
+--------------------------
+
+useful when you want to run a program that is different from the calling program
+
+1. loads code and static data from the executable passed as an argument and overwrites its current code segment and static data with it
+2. the heap and stack and other parts of the memory space of the program are re-initialized
+3. then the OS simply runs that program
+
+!!! IMPORTANT AND INTERESTING !!!
+    - it does **not** create a new process. It transforms the currently running program into a different running program.
+    - a successful call to exec never returns
+        - so any code placed after the call to exec will never run

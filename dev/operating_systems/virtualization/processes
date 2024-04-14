@@ -1,0 +1,86 @@
+A process, informally, is a running program.
+
+Only one process can be executing at any one time for a given CPU. Computer's often have tens or even hundreds of processes running, seemingly at the same time, despite only having a few CPUs. The OS accomplishes this by virtualizing the CPU. It runs one process, stops it and runs another, and so forth. This is called **time sharing** and allows users to run as many concurrent processes as they would like at the potential cost of performance, as each will run slower than if they had a dedicated CPU. The stoppage of one program and the starting of another used by time-sharing is called a **context switch**.
+
+Low-level machinery (mechanisms):
+    - low level methods or protocols that implement a needed piece of functionality
+    - examples
+        - context switch
+High-level intelligence (policies):
+    - algorithms for making some kind of decision within the OS
+    - examples
+        - given a number of possible programs to run on a CPU, which program should the OS run? This uses a scheduling policy
+
+To understand what makes up a process, we have to understand its machine state: what a program can read or update when it is running:
+    - memory
+        - instructions lie in memory
+        - the data that the running program reads and writes is in memory
+        - more generally this is the memory that the process can address: called its address space
+    - registers
+        - special registers
+            - program counter (PC (also called instruction pointer (IP)))
+                - tells us which instruction of the program will execute next
+            - stack pointer and associated frame pointer
+                - used to manage the stack for function parameters, local variables, and return addresses
+    - I/O information
+
+A common design paradigm in operating systems is to separate high-level policies from their low-level mechanisms. This allows for modularity because you can change a policy without having to rethink the mechanism.
+
+I'll cover a real process API later, but below you can find an API that is available on all modern operating systems:
+    - Create
+        - a method to create new processes
+    - Destroy
+        - a method to destroy processes forcefully (often processes exit by themselves when complete though)
+    - Wait
+        - a method to wait for a process to stop running
+    - Miscellaneous Control
+        - like suspending a process (stop it from running for a bit) and then resume (continue it running)
+    - Status
+        - a method to get status information
+
+Process Creation
+================
+
+1. load a program's code and any static data (e.g. initialized variables) into memory, into the address space of the process
+2. allocate memory for the program's run-time stack (or just stack)
+3. may also allocate memory for the program's heap
+4. doing work related to I/O
+
+Process States
+==============
+
+1. Running
+    - the process is running on the processor: meaning it's executing instructions
+2. Ready
+    - the process is ready to run but for some reason the OS has chosen not to run it at this given moment
+3. Blocked
+    - the process has performed some kind of operation that makes it not ready to run until some other event takes place
+        - a common example is when a process initiates an I/O request to a disk, making it blocked and allowing another process to use the processor
+
+Running -> Ready
+    - descheduled
+Ready -> Running
+    - scheduled
+Running -> Blocked
+    - I/O initiated
+Blocked -> Ready
+    - I/O done
+
+Key Terms
+=========
+
+- a process is the major OS abstraction of a running program
+    - at any point in time, it can be described by its state
+        - the contents of memory in its address space
+        - the contents of CPU registers (including the program counter and stack pointer among others)
+        - information about I/O (such as open files which can be read or written)
+- the process API consists of calls programs can make related to processes
+    - creation
+    - destruction
+    - etc.
+- there are different process states
+    - running
+    - ready
+    - blocked
+- a process list contains information about all processes in the system
+    - each entry is found in a process control block (PCB) which a structure that contains information about a specific process
