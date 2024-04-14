@@ -1,0 +1,23 @@
+Four fundamental tasks:
+1. Editing
+    - creating and modifying your C source code
+2. Compiling
+    - converts your source code into machine language and detects and reports errors in your code
+    - the input to the compiler is your source code
+    - two stages
+        1. preprocessing
+            - your code may be modified
+        2. generation of the object code
+    - finds the following errors (can also find structural errors (dead code))
+        - syntax errors
+            - like unbalanced paranetheses
+        - semantic errors
+            - use of a variable that is not defined
+    - output is known as object code and the file has a .obj or .o extension
+3. Linking
+    - get the program into a final form for execution on the computer by gathering all its dependencies (additional libraries) into one executable file
+    - can also detect and report errors like if part of your program is missing or a nonexistent library component is referenced
+    - in windows the executable will have a .exe extension
+    - in UNIX/Linux there will be no such extension (a.out by default)
+    - many IDEs have a build option which will compile and link your program in a single operation to produce the executable
+4. Executing

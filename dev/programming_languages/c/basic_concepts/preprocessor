@@ -1,0 +1,11 @@
+- not found in many other languages
+- part of the C compilation process that recognizes special statements
+    - analyzes these statements before analysis of the C program
+    - an instruction to your compiler to do something before compiling the source code
+    - could be anywhere in your code
+- a preprocessor statement is identified by the pound sign ``#``, which must be the first non-space character on the line
+- one example is ``#include``
+- we can
+    - create our own constants and macros with the ``#define`` statement
+    - build our own library files with the ``#include`` statement
+    - make more powerful programs with the conditional ``#ifdef``, ``#endif``, ``#else``, and ``#ifndef`` statements

@@ -1,0 +1,7 @@
+comments are ignored by the compiler
+
+Two ways to add comments
+    - multi-line
+        - /* ... */
+    - single-line
+        - //

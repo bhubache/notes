@@ -1,0 +1,14 @@
+- is a preprocessor directive (statement)
+- ``#include <stdio.h>``
+- similar to the import statement in Java
+
+Header Files
+------------
+
+- define information about some of the functions that are provided by that file
+- header file names are case sensitive on some systems so you should always write in them lowercase
+- two ways to include headers files in a program
+    1. using angle brackets ``#include <something.h>``
+        - tells the preprocessor to look for the file in one or more standard system directories
+    2. using double quotes ``#include "something.h"``
+        - tells the preprocessor to first look in the current directory
