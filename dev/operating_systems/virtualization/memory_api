@@ -1,0 +1,142 @@
+Crux: How To Allocate And Manage Memory
+---------------------------------------
+
+In UNIX/C programs, understanding how to allocate and manage memory is critical in building robust and reliable software.
+What interfaces are commonly used?
+What mistakes should be avoided?
+
+Types of Memory
+---------------
+
+Stack Memory
+============
+
+Managed implicitly by the compiler so it's sometimes called automatic memory.
+
+```
+void func() {
+    int x; // declares an integer on the stack
+}
+```
+
+The compiler makes space on the stack when you call into ``func`` and deallocates memory when you return from ``func``.
+So, if you want some information to live beyond the call invocation, you better not leave it on the stack.
+
+Heap Memory
+===========
+
+All allocations and deallocations are handled explicitly by the programmer and is thus the source of a lot of errors.
+Provides us long-term memory.
+
+```
+void func() {
+    int *x = (int *) malloc(sizeof(int));
+}
+```
+
+The ``malloc`` Call
+-------------------
+
+You pass it a size for some room on the heap and it either:
+    - succeeds and gives you back a pointer to the newly-allocated space or it
+    - fails and returns NULL
+
+The ``free`` Call
+-----------------
+
+Allocating memory with ``malloc`` is the easy part.
+Know when, how, and even if to free memory is the hard part.
+The routine takes one argument, a pointer returned by ``malloc``.
+
+Common Errors
+-------------
+
+Forgetting To Allocate Memory
+=============================
+
+Many routines expect memory to be allocated before you call them.
+
+```
+char *src = "hello";
+char *dst;         // oops! unallocated
+strcpy(dst, src);  // segfault and die
+```
+
+A correct implementation may look like the following:
+
+```
+char *src = "hello";
+char *dst = (char *) malloc(strlen(src) + 1);
+strcpy(dst, src);
+```
+
+Not Allocating Enough Memory
+============================
+
+Sometimes called a buffer overflow.
+
+```
+char *src = "hello";
+char *dst = (char *) malloc(strlen(src));  // too small!
+strcpy(dst, src);
+```
+
+- Depending on how malloc is implemented (and many other details), this program will often run seemingly correctly.
+In some cases, when the string copy executes, it writes one byte too far past the end of the allocated space, which in some cases is harmless and may just be overwriting a variable that isn't used anymore. in some cases, these overflows can be incredibly harmful, and in fact are the source of many security vulnerabilities in systems.
+- In other cases, malloc may have allocated a little extra space somehow and your program doesn't overwrite anything and runs fine
+- In even other cases, the program will fault and crash
+
+EVEN THOUGH IT RUNS CORRECTLY ONCE, DOESN'T MEAN IT'S CORRECT.
+
+Forgetting To Initialize Allocated Memory
+=========================================
+
+You call malloc properly but forget to fill in some value into your newly-allocated data type. This will eventually result in an uninitialized read, where it reads from the heap some data of unknown value.
+
+Forgetting To Free Memory
+=========================
+
+This is called a memory leak.
+This is particularly important in long-running applications or systems (such as the OS) because even a slow memory leak eventually causes no more memory to be available, requiring a restart.
+
+Freeing Memory Before You Are Done With It
+==========================================
+
+A dangling pointer.
+
+Aside: Why No Memory Is Leaked Once Your Process Exits
+======================================================
+
+There are two levels of memory management:
+1. Performed by the OS, which hands out memory to processes when they run and takes it back when processes exit (or otherwise die)
+2. Within a process. Even if you fail to call ``free`` and thus leak memory in the heap, the OS will reclaim all the memory of the process (including those pages for code, stack, and, as relevant here, heap) when the program is finished running. With that said, it's a bad habit to not call ``free`` even if the program works
+
+Freeing Memory Repeatedly
+=========================
+
+Known as the double free.
+The result of doing this is undefined. Crashes are common.
+
+Calling ``free`` Incorrectly
+============================
+
+Passing things other than a pointer to ``free`` can cause bad things to happen.
+
+Underlying OS Support
+---------------------
+
+``malloc`` and ``free`` are not system calls, they are library calls. The libraries make system calls (``brk`` and ``sbrk``).
+
+Other Calls
+-----------
+
+``calloc``
+==========
+
+Allocates memory and zeroes it before returning.
+
+``realloc``
+===========
+
+Makes a new larger region of memory, copies the old region into it, and returns the pointer to the new region.
+Useful for situations like when you've allocated space for an array and then need to add something to it.

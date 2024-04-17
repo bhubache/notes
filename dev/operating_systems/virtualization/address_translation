@@ -1,0 +1,53 @@
+The Crux: How To Efficiently And Flexibly Virtualize Memory
+-----------------------------------------------------------
+
+How can we build an efficient virtualization of memory?
+How do we provide the flexibility needed by applications?
+How do we maintain control over which memory locations an application can access, and thus ensure that application memory accesses are properly restricted?
+How do we do all of this efficiently?
+
+We will use hardware-based address translation, or just address translation for short. We can consider this an extension of limited direct execution.
+The hardware transforms each memory access, changing the virtual address provided by the instruction to a physical address where the desired information is actually located.
+
+Assumptions
+-----------
+
+1. The user's address space must be placed contiguously in physical memory
+2. The size of the address space is not too big; specifically, that it is less than the size of physical memory
+3. Each address space is exactly the same size
+
+Dynamic (Hardware-based) Relocation
+-----------------------------------
+
+The first kind, referred to as base and bounds or dynamic allocation.
+Two hardware registers within each CPU:
+1. base register
+2. bounds (limit) register
+
+The base-and-bounds pair allows us to place the address space anywhere we'd like in physical memory and ensure that the process can only access its own address space.
+Each program is written and compiled as if it is loaded at address zero. However, when the program starts running, the OS decides where in physical memory it should be loaded and sets the base register to that value.
+Now, every memory reference is translated by the processor as follows:
+
+    physical address = virtual address + base
+
+The bounds register is there for protection. If a process generates a virtual address >= bounds register, or one that is negative, the CPU will raise an exception, and the process will likely be terminated.
+
+The part of the process that helps with address translation is sometimes call the memory management unit (MMU).
+
+Hardware Support: A Summary
+---------------------------
+
+Hardware Requirements
+=====================
+
+- Privileged mode: needed to prevent user-mode processes from executing privileged privileged operations
+- Base/bounds registers: need pair of registers per CPU to support address translation and bounds checks
+- Ability to translate virtual addresses and check if within bounds: circuitry to do translations and check limits; in this case, quite simple
+- Privileged instruction(s) to update base/bounds: OS must be able to set these values before letting a user program run
+- Privileged instruction(s) to register exception handlers: OS must be able to tell hardware what code to run if exception occurs
+- Ability to raise exceptions: when processes try to access privileged instructions or out-of-bounds memory
+
+Operating System Issues
+-----------------------
+
+

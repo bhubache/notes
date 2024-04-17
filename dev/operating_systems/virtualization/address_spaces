@@ -1,0 +1,68 @@
+One crude way to implement virtual memory would be to run a process for a bit, giving it full access to all memory. Then, stop it, save all of its state to disk (which includes all of physical memory). Load some other process's state, run it for a while, and repeat.
+This is really slow though.
+It'd be much better if processes could be left in memory.
+Allowing multiple programs in memory makes protection an important issue; you don't want a process to be able to read or write some other process's memory.
+
+The Address Space
+-----------------
+
+The running program's view of memory in the system.
+It contains all of the memory state of the running program.
+    - the code of the program (the instructions)
+    - the stack to keep track of where it is in the function call chain as well as to allocate local variables and pass parameters and return values to and from routines
+    - the heap for dynamically-allocated, user-managed memory, such as that you might receive from a call to ``malloc``
+    - there are other things like statically-initialized variables and the like
+
+
+0 KB  ################
+      # Program Code #    the code segment: where instructions live, static so it can be placed at the top and know it won't grow or shrink
+1 KB  ################
+      #     Heap     #    the heap segment: contains malloc'd data, dynamic data structures (it grows positively)
+2 KB  ################
+      #      |       #
+      #      |       #
+      #      |       #
+      #      |       #
+      #      |       #
+      #      v       #
+      #              #
+      #   (free)     #
+      #              #
+      #      ^       #
+      #      |       #
+      #      |       #
+      #      |       #
+      #      |       #
+      #      |       #
+15 KB ################
+      #    Stack     #    the stack segment: contains local variables, arguments to routines, return values, etc. (it grows negatively)
+16 KB ################
+
+What makes this virtual is that the program isn't actually at physical address 0 through 16 KB, the OS provides an abstraction to make it appear that way.
+
+The Crux: How to Virtualize Memory
+How can the OS build this abstraction of a private, potentially large address space for multiple running processes (all sharing memory) on top of a single, physical memory?
+
+Goals
+-----
+
+Transparency
+============
+
+A running program shouldn't be aware that the memory is virtualized.
+
+Efficiency
+==========
+
+Shouldn't use too much time or space.
+
+Protection
+==========
+
+The OS should protect processes from one another and itself from other processes.
+Provides us the property of isolation. Each process should be running in its own isolated cocoon, safe from the ravages of other faulty or even malicious processes.
+
+Every Address You See Is Virtual
+--------------------------------
+
+Any address you can see as a programmer of a user-level program is a virtual address.

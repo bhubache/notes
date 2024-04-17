@@ -1,0 +1,73 @@
+Instead of optimizing for turnaround or response time, try to guarantee that each job will obtain a certain percentage of CPU time (proportional-share or fair-share scheduling).
+
+Lotter Scheduling
+-----------------
+
+Each process is given some number of tickets for the lottery. The more tickets a process has, the higher a chance it has at winning (running).
+
+Ticket Mechanisms
+-----------------
+
+Ticket Currency
+===============
+
+I don't understand the point of this.
+
+Assume there are two users, A and B, and each has 100 tickets.
+User A is running two jobs, A1 and A2 and gives them each 500 tickets (out of the total of 1000) in A's currency.
+User B is running one job and gives it 10 tickets (out of 10 total) in B's currency.
+The system converts each user's currency into the global currency so the lottery can be held:
+500 tickets for A1 -> 50  tickets globally
+500 tickets for A2 -> 50  tickets globally
+10  tickets for B  -> 100 tickets globally
+
+Ticket Transfer
+===============
+
+A process can temporarily hand off its tickets to another process.
+A situation where this beneficial is in a client/server setting where the client requests some work from the server. The client sends tickets to the server to speed it up and when the server is finished, it transfers the tickets back to the client.
+
+Ticket Inflation
+================
+
+A process can temporarily raise or lower the number of tickets it owns.
+This wouldn't work in scenario where the processes don't trust each other, because a greedy process could just give itself a lot of tickets and take over the machine.
+So, inflation would only work when the processes trust each other.
+
+Stride Scheduling
+-----------------
+
+A deterministic fair-share scheduler.
+Assign tickets to each process.
+Calculate the stride for each process by dividing a large number by the process's number of tickets.
+Each time a process runs, we will increment a counter (called its pass value) by its stride.
+The process with the lowest pass value at each time slice will be the next to run.
+
+So, processes with a large number of tickets will have smaller stride values and will thus run more frequently.
+
+This is straightforward and deterministic, so why even bother with lottery scheduling?
+Lottery scheduling doesn't maintain state per process.
+For stride scheduling, if a new process enters after the scheduling has begun, what should its pass value be? This is not very easy to determine.
+If this scenario happened with lottery scheduling, you simply update the single variable that tracks how many total tickets there are.
+
+The Linux Completely Fair Scheduler (CFS)
+-----------------------------------------
+
+Basic Operation
+===============
+
+Does not use a fixed time slice.
+It uses a counting-based technique known as virtual runtime (vruntime).
+As each process runs, it accumulates vruntime.
+In the most basic case, each process's vruntime increases at the same rate, in proportion with physical (real) time.
+CFS picks the process with the lowest vruntime.
+
+Uses various control parameters to decide when to switch running processes.
+One of which is is ``sched_latency``, typically 48 ms. This value is divided by the number (n) of processes running to dynamically determine the time slice.
+For example, n = 4 so the time slice is 48 / 4 = 12 ms. It runs A for 12 ms and then switches to B which runs for 12 ms and then switches to C which runs for 12 ms and then switches to D which runs for 12 ms. If A and B were to finish at this point, the time slice would be recalculated to 48 / 2 = 24 ms, allowing for fewer context switches.
+
+But what if there are "too many" processes running? Wouldn't the time slice be very small and cause too many context switches. It would! To address this, CFS uses another parameter called ``min_granularity`` which is usually set to like 6 ms. CFS will never set the time slice to a value less than this.
+
+CFS utilizes a periodic timer interrupt to make decisions at fixed intervals (every 1 ms): like reacting to a job completing.
+
+If a job has a time slice that is not a perfect multiple of the timer interrupt interval, that is ok; CFS tracks vruntime precisely, which means that over the long haul, it will eventually approximate ideal sharing of the CPU.
