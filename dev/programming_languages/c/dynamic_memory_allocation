@@ -1,0 +1,55 @@
+``malloc``
+==========
+
+The simplest standard library function that allocates memory at runtime
+    - need to inclue the stdlib.h header file
+    - you pass the number of bytes of memory that you want allocated as the argument
+    - returns the address of the first byte of memory that it allocated
+        - must save it in a pointer (because it's an address)
+        - malloc returns a void pointer type
+
+int *p_number = (int*)malloc(100);  // explicitly cast the return value of malloc to an int pointer
+
+Usually not a good idea to malloc constants. For example, if you want to allocate enough memory for 25 int values, the amount of memory needed differs based on your computer's architecture. It could be 4 bytes or 8 bytes. It would be better to do the following:
+
+int *p_number = (int*)malloc(25 * sizeof(int));
+
+If the memory you requested can not be allocated, malloc returns a pointer with the value NULL, so it's a good habit to check for NULL whenever using malloc.
+
+Because the programmer is explicitly allocating memory, they are also responsible for releasing memory.
+To free memory that you have allocated dynamically, you must still have access to the address that references the block of memory.
+
+```
+free(p_number);
+p_number = NULL;  // good to immediately set the pointer to NULL so attempts to access anything with p_number won't work
+```
+
+``free`` has a parameter type void* so you can pass a pointer of any type as the argument.
+
+``calloc``
+==========
+
+- allocates memory as a number of elements of a given size
+- initializes the memory that is allocated so that all bytes are zero (this is the big difference from malloc)
+- takes two arguments:
+    1. the number of items for which space is required
+    2. size of each item
+
+int *p_number = (int*) calloc(75, sizeof(int));
+
+Otherwise the same as malloc.
+
+``realloc``
+===========
+
+Enables you to reuse or extend memory that you previously allocated using malloc or calloc.
+- expects two argument values:
+    1. a pointer containing an address that was previously returned by a call to malloc or calloc
+    2. the size in bytes of the new memory that you want allocated
+- transfers the contents of the previously allocated memory, referenced by the pointer supplied as the first argument, to the newly allocated memory
+- returns a void* pointer to the new memory or NULL if the operation fails
+
+Guidelines
+==========
+
+Avoid allocating lots of small amounts of memory as there will be a lot of overhead.

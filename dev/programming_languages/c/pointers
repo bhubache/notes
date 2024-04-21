@@ -1,0 +1,223 @@
+A pointer provides an indirect means of accessing the value of a particular data item.
+It's a variable whose value is a memory address.
+Its value is the address of another location in memory that can contain a value.
+Like declaring a variable for a normal primitive data type, you have to specify the type of the pointer (so compiler knows how much memory to allocate). Furthermore, a pointer can only pointer to variables of the same type.
+
+```
+int number = 99;
+int *pnumber = &number;
+```
+
+``&number`` is the address where ``number`` is located and is the value that ``pnumber`` is initialized to.
+
+``int *pnumber;  // declares a pointer to a variable of type int``
+``int * pnumber; // declarations have a space between the asterisk and variable name by convention``
+pointers are represented as an unsigned integer on most systems (however a pointer is not an integer)
+``%p`` is the format specifier for pointers
+You should always initialize a pointer when you declare it! If you don't know what to initialize it with, use the NULL pointer: ``int *pnumber = NULL;``
+NULL is a constant defined in the standard library and is the equivalent of zero for a pointer
+    - doesn't point to anything
+    - prevents the accidental overwriting of memory by using a pointer that does not point to anything specific
+    - need to add the #include directive for stddef.h
+
+You can declare regular variables and pointers in the same statement.
+
+Address of Operator
+===================
+
+Used to initialize a variable with the address of a variable you have already declared
+``&``.
+```
+int number = 99;
+int *pnumber = &number;
+```
+
+Accessing Pointer Values
+========================
+
+You can use the indirection operator ``*`` to access the value at the memory address stored by the pointer.
+Also called the dereference operator because you use it to dereference a pointer
+
+```
+int number = 15;         // a variable of type int with value 15
+int *pointer = &number;  // a pointer of type int pointing to the address of number
+int result = 0           // a variable of type int with value 0
+
+result = *pointer + 5; // equals 15
+```
+
+``*`` is used for multiplication, specifying pointer types, and for dereferencing a pointer. Context determines the meaning of it and is understood by the compiler.
+pointers occupy 8 bytes.
+
+A pointer stores the address of some place in memory, but the pointer has to be stored somewhere in memory too, thus it has a memory address as well.
+```
+int number = 15;
+int *pointer = &number;
+printf("pnumber's address: %p\n", (void*) &pnumber);
+```
+
+The case to void is to prevent a possible warning from the compiler. The ``%p`` specification expects the value to be some kind of pointer type, but the type of ``&pnumber`` is "pointer to pointer to int".
+
+Displaying the Number of Bytes a Pointer Is Using
+=================================================
+
+Use the ``sizeof`` operator.
+
+```
+int main(void)
+{
+    int number = 0;                                       // a variable of type int initialize to 0
+    int *pnumber = NULL;                                  // a pointer that can point to type int
+
+    number = 10;                                          // set the variable ``number`` to the value 10
+    printf("number's address: %p\n", &number);            // output the address of ``number``                      --> 0x7fff7e8ba64c
+    printf("number's value  : %d\n", number);             // output the value of ``number``                        --> 10
+
+    pnumber = &number;                                    // set the variable ``pnumber`` to the address of ``number``
+
+    printf("pnumber's address: %p\n", (void*)&pnumber);   // output the address of ``pnumber``                     --> 0x7fff7e8ba650
+    printf("pnumber's size:   %zd\n", sizeof(pnumber));   // output the size of ``pnumber`` in bytes               --> 8
+    printf("pnumber's value:   %p\n", pnumber);           // output the value of ``pnumber``                       --> 0x7fff7e8ba64c
+    printf("value pointed to:  %d\n", *pnumber);          // output the value at the address ``pnumber`` points to --> 10
+
+    return 0;
+}
+```
+
+Using Pointers
+--------------
+
+```
+int main()
+{
+    int number = 0;
+    int *pnumber = NULL;
+    number = 10;
+    pnumber = &number;
+    *pnumber += 25;  // changes the value stored in number!
+
+    printf("Value of number: %d\n", number);  // outputs 35!
+
+    return 0;
+}
+```
+
+Second argument to scanf should be a pointer.
+
+Testing for NULL
+================
+
+Do not dereference an uninitialized pointer.
+
+```
+int main()
+{
+    int *pnumber;  // an uninitialized pointer
+    *pnumber = 5;  // store the value 5 at the address pnumber points to
+                   // because pnumber was not initialized, we don't know
+                   // the memory address that 5 will be placed at
+                   // this could be harmless, or it could overwrite data or code
+                   // or it might cause the program to crash
+
+    return 0;
+}
+```
+
+Creating a pointer only allocates enough memory to store the pointer itself and therefore does not allocate memory to store data.
+Assign to NULL, the address of another variable, or use malloc to dynamically allocate memory.
+Check for NULL with ``if (!pnumber) ...``
+
+Pointers and const
+------------------
+
+The const modifier on a variable or array tells the compiler that the contents of the variable/array will not be changed by the program.
+
+Does const mean to make the value of the pointer (the address) constant or the value pointed to by the pointer constant?
+Depends on the syntax.
+
+Making the value pointed to by a pointer constant
+=================================================
+
+const <type> *<name> = <address>;
+
+```
+long value = 9999L;
+const long *pvalue = &value;  // the value pointed to by ``pvalue`` is a constant (we cannot change 9999L)
+
+*pvalue = 8888L;  / Error - assignment of read-only location
+```
+
+You can still modify the value of ``value`` because the const has only been applied to the pointer.
+The pointer itself is not constant so you can still change what it points to.
+
+Making the address stored in a pointer constant
+===============================================
+
+<type> *const <name> = <address>;
+
+Create a constant pointer that points to a value that is also constant
+======================================================================
+
+```
+int item = 25;
+const int *const pitem = &item;
+```
+
+You can still change item using the item variable! You just can't change the value of item using the pointer (or change the pointer's address).
+To make sure nothing changes, you'd have to also make item a constant.
+
+Void Pointers
+-------------
+
+void means absence of any type.
+So, a pointer of type ``void*`` can contain the address of a data item of any type.
+Often used as a parameter type or return type with functions that deal with data in a type-independent way.
+
+The drawback is that because a void pointer does not know what type of object it is pointing to, it cannot be dereferenced directly. You must first explicitly cast it.
+
+Pointers and Arrays
+-------------------
+
+int values[100];  / an array of 100 integers
+
+When you define a pointer that is used to point to the elements of an array, you designate the type as pointing to the type of an element of the array.
+
+int *valuesPtr;
+
+To set ``valuesPtr`` to point to the first element in the values array, write
+
+valuesPtr = values;
+
+You don't have to use the address of operator or anything because an array is just a pointer.
+
+An equivalent way is ``valuesPtr = &values[0];``
+
+arr[i] is equivalent to *(arr + i)
+    - both work if arr is the name of an array
+    - both work if arr is a pointer variable
+    - an expression such as arr++ only works if arr is a pointer variable
+
+Passing Pointers to a Function
+------------------------------
+
+C only uses pass by value but simulates pass by reference with pointers.
+
+```
+// swaps the values at the addresses x and y so the change is reflected outside of the function
+void swap(int *x, int *y)
+{
+    int temp;
+    temp = *x;  // save the value at address x
+    *x = *y;    // put the value at address y at address x
+    *y = temp;  // put the value in temp at address y
+
+    return;
+}
+```
+
+You can return a pointer from a function to enable returning multiple values.
+The function must be declared with a return type and asterisk to indicate that it returns a pointer.
+
+```
+int * myFunction() { ... }
+```

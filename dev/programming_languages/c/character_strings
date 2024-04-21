@@ -1,0 +1,22 @@
+C has no special variable type for strings which means:
+    - no operators for processing strings, you have to use functions defined in the standard library
+
+Strings are stored in an array of type char.
+Characters are stored in adjacent memory cells, one character per cell
+
+char my_string[20]; // can accomdate a string that contains up to 19 characters (you have to account for the automatically added terminating null character)
+
+Easier to just let the compiler determine how much space is needed so strongly consider not putting the size inside the square brackets.
+
+char word[] = {'H', 'e', 'l', 'l', 'o', '!'};
+char word[] = { "Hello!" };
+char word[] = "Hello!";
+
+You cannot assign one array of characters to another array of characters after it has been declared or initialized. You have to use ``strncpy``.
+
+The ``%s`` format specifier is for outputting a null-terminated string.
+
+The string constant "x" is **not** the same as the character constant 'x'
+'x' is a basic type (char)
+"x" is a derived type, an array of char
+"x" really consists of two characters, 'x' and '\0' (the null character)

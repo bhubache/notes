@@ -50,4 +50,4 @@ Hardware Requirements
 Operating System Issues
 -----------------------
 
-
+Internal fragmentation is when space inside an allocated unit is not completely used (like space between the stack and heap).

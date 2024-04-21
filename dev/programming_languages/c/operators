@@ -1,0 +1,16 @@
+sizeof
+------
+
+Find out how many bytes are occupied in memory by a given type.
+Though it looks like a function, it is actually an operator because it is evaluated at compile time (unless a variable-length array is used in its argument)
+The argument can be a:
+- variable
+- array name
+- name of basic data type
+- name of derived data type
+- expression
+
+asterisk ``*``
+--------------
+
+Represents a pointer to a variable.

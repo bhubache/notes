@@ -1,0 +1,24 @@
+The simple approach of using a base and bounds register pair to virtualize memory is wasteful because of the space between the stack and heap not being used by the process. That space still takes up physical memory when we relocate the entire address space somewhere in physical memory.
+It also makes it quite hard to run a program when the entire address space doesn't fit into memory.
+
+The Crux: How To Support A Large Address Space
+----------------------------------------------
+
+How do we support a large address space with (potentially) a lot of free space between the stack and heap?
+
+Segmentation: Generalized Base/Bounds
+-------------------------------------
+
+Instead of having just one base and bounds pair in our memory management unit (MMU), why not have a base and bounds pair per logical segment of the address space?
+A segment is a contiguous portion of the address space of a particular length: like code, stack, and heap.
+This allows the OS to place each segment in different parts of physical memory independently and thus avoid filling physical memory with unused virtual space.
+
+Aside: The Segmentation Fault (or violation)
+--------------------------------------------
+
+Arises from a memory access on a segmented machine to an illegal address. The term persists, even on machines with no support for segmentation at all.
+
+Which Segment Are We Referring To?
+----------------------------------
+
+

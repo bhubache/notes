@@ -1,0 +1,70 @@
+Allows you to group elements together.
+It's like a dictionary in python in that you can bundle data together but there's no behavior.
+The elements inside a structure are called members or fields.
+
+struct date
+{
+    int month;
+    int day;
+    int year;
+};
+
+There is no memory allocation for this declaration.
+
+This defines a new type in the language and variables can be declared with this type.
+
+struct date today;  // memory is now allocated because we've declared a variable
+
+Accessing Members in a Struct
+=============================
+
+A structure variable name is not a pointer, a special syntax is needed to access the members.
+You refer to a member of a structure by writing <struct variable name>.<member variable name>
+The dot is called the member selection operator.
+
+today.day = 25;
+today.year = 2015;
+
+There's some flexibility in defining a structure:
+    - You can declare a variable to be of a particular structure at the same time that structure is defined by including the variable name(s) before the terminating semicolon of the structure definition
+    - You can assign initial values to the variables in the normal fashion
+    - You also don't have to provide a tag name
+        - if all variables of a particular structure type (like today for the date struct) are defined when the structure is defined, the structure name can be omitted
+
+struct date
+{
+    int month = 1;
+    int day;
+    int year;
+} today;
+
+
+struct
+{
+    int day;
+    int year;
+    int month;
+} today, tomorrow;
+
+Initializing structures is similar to initializing arrays
+    - the elements are listed inside a pair of curly braces with each element separated by a comma
+    - the initial values listed inside the curly braces must be constant expressions
+
+struct date today = { 7, 2, 2015 };
+
+Like array initialization, fewer values than what's supported by the structure can be listed.
+
+struct date some_date = { 12, 10 };
+
+You can do a keyword-like initialization
+
+struct date date1 = { .month = 12, .day = 10 };
+
+You can assign one or more values to a structure in a single statement using a compound literal (not an initialization! can be used after initialization!):
+
+today = (struct date) { 9, 25, 2015 };  // you can also use the .member notation
+
+Structures and Arrays
+---------------------
+
+

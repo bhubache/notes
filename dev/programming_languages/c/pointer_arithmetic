@@ -1,0 +1,14 @@
+Because an array is a contiguous sequence of memory, you increment and decrement a pointer to iterate over the elements of an array.
+
+int arr[3];
+int * ptr1, * ptr2;
+
+Valid                Invalid
+=====                =======
+
+ptr1++;              arr++;
+ptr2 = ptr1 + 2;     ptr2 = ptr2 + ptr1;
+ptr2 = arr + 1;      ptr2 = arr * ptr1;
+
+When you increment a pointer to traverse an array, you don't need to worry about the size of the type of each element in the array, the compiler will handle that for you.
+For example, an array of ints and array of longs can be traversed by incrementing a pointer by one even though more bytes separate the addresses in the long array than the int array.
