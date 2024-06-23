@@ -1,0 +1,59 @@
+There are special locations in the CPU called registers that are used to manipulate data.
+The x86-64 CPUs can be broken down into 4 categories:
+1. general purpose registers
+2. special-purpose application-accessible registers
+3. segment registers (not used much in 64-bit operating systems)
+4. special-purpose kernel-mode registers
+
+The <name_one>|<name_two> syntax means <name_one> refers to bits 0-15
+
+There are 16 64-bit registers.
+
+63............................31...............15.......7......0
+rax                           eax           ax|ah       al
+rbx                           ebx           bx|bh       bl
+rcx                           ecx           cx|ch       cl
+rdx                           edx           dx|dh       dl
+rsi                           esi           si|         sil
+rdi                           edi           di|         dil
+rbp                           ebp           bp|         bpl
+rsp                           esp           sp|         spl
+r8                            r8d          r8w|         r8b
+r9                            r9d          r9w|         r9b
+r10                          r10d         r10w|         r10b
+r11                          r11d         r11w|         r11b
+r12                          r12d         r12w|         r12b
+r13                          r13d         r13w|         r13b
+r14                          r14d         r14w|         r14b
+r15                          r15d         r15w|         r15b
+................................................................
+
+There are 8 floating-point registers implemented in the x87 floating-point unit (FPU) named ST(0) to ST(7).
+Each register is 80 bits wide, holding an extended-precision real value.
+
+The RFLAGS (or just FLAGS) register is a 64-bit register that encapsulates several single-bit boolean values.
+Most are reserved for kernel mode or are of little interest to application programmers.
+8 of these are of interest to application programmers
+
+15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+             |  |  |     |  |     |     |     |
+      overflow  |  |     |  |     |     |     |
+                |  |     |  |     |     |     |
+      direction    |     |  |     |     |     |
+                   |     |  |     |     |     |
+      interrupt ---      |  |     |     |     |
+                         |  |     |     |     |
+      sign --------------   |     |     |     |
+                            |     |     |     |
+      zero -----------------      |     |     |
+                                  |     |     |
+      auxiliary carry ------------      |     |
+                                        |     |
+      parity ---------------------------      |
+                                              |
+      carry ----------------------------------
+
+The overflow, carry, sign, zero, and parity flags are collectively called the condition codes and can be used to test
+the result of a previous computation.
+
+Although these registers are called general purpose registers, they cannot all be used for any purpose: such as how rsp is the stack pointer.

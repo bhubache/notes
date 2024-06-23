@@ -1,0 +1,102 @@
+The mov instruction
+-------------------
+
+mov destination_operand, source_operand
+
+- source_operand may be a general-purpose register, a memory variable, or a constant
+- destination_operand may be a register or a memory variable
+- both operands cannot be memory variables
+- both operands must be the same size
+    - The only size constant that can be moved into a 64-bit memory location is 32-bit, where it gets
+      sign-extended to 64 bits
+
+The add and sub instructions
+----------------------------
+
+    add destination_operand, source_operand
+    sub destination_operand, source_operand
+
+Constant operands are limited to a maximum of 32 bits.
+
+add does the following:
+
+    destination_operand = destination_operand + source_operand
+
+sub does the following:
+
+    destination_operand = destination_operand - source_operand
+
+The lea instruction (load effective address)
+--------------------------------------------
+
+Used to load the address of a variable into a register rather than the value of the variable.
+
+    lea reg64, memory_var
+
+- reg64 is any general-purpose 64-bit register
+- memory_var is variable name
+- memory_var's type (it's size) is irrelevant, as opposed to mov, add, and sub where the type does matter
+    - This is because every variable has a memory address associated with it and that address is always 64 bits
+
+The call and ret Instructions and MASM Procedures
+-------------------------------------------------
+
+- The ret instruction servers the same purpose as ``return`` in high-level languages: it returns control from an
+  assembly language procedure (assembly language functions are called procedures)
+    - ret does allow a single operand (we'll get to it later) but it does not specify a function return value (like in
+      high-level languages)
+- You call a MASM procedure using the call instruction, which can take a couple forms, the most common of which is:
+
+    call proc_name
+
+  where proc_name is the name of the procedure you want to call
+
+A MASM procedure consists of:
+
+<proc_name> proc
+
+followed by the body (typically ending with ret) and at the end of the procedure you have:
+
+<proc_name> endp
+
+You can call C/C++ procedures using the externdef directive:
+
+    externdef symbol:type
+
+where:
+    - symbol is the external symbol you want to define (printf for example)
+    - type is the type of that symbol (proc for external procedure definitions)
+    - when defining external procedure symbols, the directive should be placed in the .code section
+
+    externdef printf:proc
+
+Unlike in high-level languages where a functions' return value is returned directly to the caller, procedures in
+assembly place there output in whatever register they want, and the calling function must know which register that is.
+The same goes for procedure arguments. Therefore, people writing code need to agree on what registers to expect outputs
+and inputs to be placed.
+
+This agreement is called an application binary interface (ABI) and is used to describe calling conventions, data types,
+memory usage and alignment, and other attributes.
+
+The Microsoft ABI specifies that the first four parameters to printf() (or any C++ function for that matter) must
+passed in rcx, rdx, r8, and r9.
+It also states that functions (procedures) return integer and pointer values (that fit into 64 bits) in the rax
+register.
+
+Register Usage (for Microsoft ABI)
+----------------------------------
+
+- Code that calls a function can pass the first four (integer) arguments to the function (procedure) in the rcx, rdx,
+  r8, and r9 registers respectively. Programs pass the first four floating-point arguments in XMM0, XMM1, XMM2, and XMM3
+- Registers rax, rcx, rdx, r8, r9, r10, and r11 are *volatile*, which means that the function/procedure does not need
+  to save the registers' values across a function/procedure call
+- XMM0/YMM0 through XMM5/YMM5 are also volatile
+- rbx, rbp, rdi, rsi, rsp, r12, r13, r14, and r15 are nonvolatile registers. A procedure/function must preserve these
+  registers' values across a call. If a procedure modifies one of these registers, it must save the registers' value
+  before the first modification and restore the regsiters' value from the saved location prior to returning from the
+  function/procedure
+- XMM6 through XMM15 are nonvolatile
+- Programs that use the x86-64's floating-point coprocessor instructions must preserve the value of the floating-point
+  control word across procedure calls. Such procedures should also leave the floating-point stack cleared
+- Any procedure/function that uses the x86-64's direction flag must leave that flag cleared upon return from the
+  procedure/function

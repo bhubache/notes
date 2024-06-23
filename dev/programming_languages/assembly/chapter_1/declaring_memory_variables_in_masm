@@ -1,0 +1,79 @@
+To create writable data variables, they must be in the data section of the source code, defined using the .data
+directive. This directive tells MASM that the following statements (up to the next section-defining directive) will
+define data declarations to be grouped into a read/write section of memory.
+
+Within the data section, you can declare variable objects by using data declaration directives of the form:
+
+    label directive ?
+
+where:
+- label is a valid MASM identifier
+- directive is a valid directive (see below)
+
+Directive     | Meaning
+--------------+-------------------------------------------------
+--------------+-------------------------------------------------
+byte (or db)  | Byte (unsigned 8-bit) value
+--------------+-------------------------------------------------
+sbyte         | Signed 8-bit integer value
+--------------+-------------------------------------------------
+word (or dw)  | Unsigned 16-bit (word) value
+--------------+-------------------------------------------------
+sword         | Signed 16-bit integer value
+--------------+-------------------------------------------------
+dword (or dd) | Unsigned 32-bit (double-word) value
+--------------+-------------------------------------------------
+sdword        | Signed 32-bit integer value
+--------------+-------------------------------------------------
+qword (or dq) | Unsigned 64-bit (quad-word) value
+--------------+-------------------------------------------------
+sqword        | Signed 64-bit integer value
+--------------+-------------------------------------------------
+tbyte (or dt) | Unsigned 80-bit (10-byte) value
+--------------+-------------------------------------------------
+oword         | 128-bit (octal-word) value
+--------------+-------------------------------------------------
+real4         | Single-precision (32-bit) floating-point value
+--------------+-------------------------------------------------
+real8         | Double-precision (64-bit) floating-point value
+--------------+-------------------------------------------------
+real10        | Extended-precision (80-bit) floating-point value
+--------------+-------------------------------------------------
+
+The question mark operand tells MASM that the object will not have an explicit value when the program loads into memory
+(the default initialization is zero). To have an explicit value, just replace the question mark with what you want.
+
+For the most part, MASM ignores the prefix indicating that the data should be signed.
+
+In a data declaration, you can place multiple data values in the operand field, separate by commas, and MASM will emit
+an object of the specified size and vale for each operand.
+
+.. code::
+
+    ; Zero-terminated C/C++ string
+    strVarName byte 'String of characters', 0
+
+In the above code block, MASM emits a byte for each character in the string plus a zero byte for the ``, 0`` at the
+end of the string.
+**Note**: Strings can use single or double quotes.
+
+Declaring (Named) Constants in MASM
+-----------------------------------
+
+You can declare manifest constants using the ``=`` directive.
+A manifest constant is a symbolic name (identifier) that MASM associates with a value.
+Everywhere the symbol appears in the program, MASM will directly substitute the value of that symbol.
+
+    label = expression
+
+where:
+    - label is a valid MASM identifier
+    - expression is a constant arithmetic expression (typically a single value)
+
+    dataSize = 256
+
+For the purposes of this chapter, the following is largely equivalent:
+
+    dataSize equ 256
+
+These can appear anywhere in the MASM source file prior to their first use.

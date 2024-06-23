@@ -1,0 +1,9 @@
+Holds data such as program variables, constants, machine instructions, and other information.
+Memory is organized into cells (or memory locations), each of which holds a small piece of information.
+Inforamtion from cells and be combined to form larger pieces of information.
+
+x86-64 supports byte-addressable memory, meaning the basic memory unit is a byte.
+
+Memory can be thought of as a linear array of bytes.
+
+The memory address of each object is the address of the first byte of each object (the lowest address).
