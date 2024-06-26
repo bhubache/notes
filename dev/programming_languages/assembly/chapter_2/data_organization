@@ -1,0 +1,88 @@
+Bits
+----
+
+1 bit
+2^1 == 2 distinct values
+
+The smallest unit of data on a binary computer.
+With a single bit you can represent **any** two distinct items:
+    - 0 or 1
+    - true or false
+    - 723 or 1245
+    - red or blue
+    - red or 3250
+
+Data is what you define it to be.
+
+Nibbles
+-------
+
+4 bits
+2^4 == 16 distinct values
+
+Common things represented with nibbles:
+    - hexadecimal digits
+    - Binary-coded decimal (BCD) where each decimal digit uses a nibble
+
+Bytes
+-----
+
+8 bits
+2^8 == 256 distinct values
+
+```
+        .data
+byteVar byte ?
+```
+
+ 07 06 05 04 03 02 01 00
+ \_________/ \_________/
+  HO Nibble   LO Nibble
+
+Because the x86-64 is a byte-addressable machine, it's more efficient to manipulate a whole byte than an individual bit
+or nibble. So it's more efficient to use a whole byte to represent data types that require no more than 256 items, even
+if fewer than 8 bits would suffice.
+
+Bytes are the smallest variable you can create in a MASM program.
+
+You may store any 8-bit value (small signed integers, small unsigned integers, characters, and the like) into a byte
+variable, but it is up to you to keep track of the type of object you've put into a byte variable.
+
+Words
+-----
+
+16 bits
+2^16 == 65,536 distinct values
+
+```
+        .data
+wordVar word ?
+```
+
+15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+\_________/ \_________/ \_________/ \_________/
+ Nibble 3    Nibble 2    Nibble 1    Nibble 0
+ HO Nibble                           LO Nibble
+\_____________________/ \_____________________/
+        HO Byte                 LO Byte
+
+Double Words
+------------
+
+32 bits
+
+```
+        .data
+dwordVar dword ?
+```
+
+Quad Words and Octal Words
+--------------------------
+
+64 bits and 128 bits respectively.
+
+```
+        .data
+qwordVar qword ?
+owordVar oword ?
+```

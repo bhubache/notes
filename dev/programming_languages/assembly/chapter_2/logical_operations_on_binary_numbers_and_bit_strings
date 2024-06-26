@@ -1,0 +1,24 @@
+Using the logical AND, OR, and XOR operations to manipulate bit strings is known as masking bit strings.
+
+and, or, and xor have the same syntax as add and sub instructions:
+
+```
+and dest, source
+or  dest, source
+xor dest, source
+```
+
+Which is equivalent to:
+
+    dest = dest operator source
+
+
+The not instruction has the following form:
+
+```
+not dest
+```
+
+Which is equivalent to:
+
+    dest = not(dest)

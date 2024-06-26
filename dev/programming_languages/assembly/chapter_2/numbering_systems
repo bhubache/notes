@@ -1,0 +1,80 @@
+Binary Conventions
+------------------
+
+The rightmost bit is bit position 0.
+So, an 8-bit binary number could be represented as:
+
+    X_7 X_6 X_5 X_4 X_3 X_2 X_1 X_0
+
+Bit 0 is called the low-order (LO) bit and is sometimes referred to as the least significant bit.
+The leftmost bit is the high-order (HO) bit and is sometimes referred to as the most significant bit.
+
+Hexadecimal
+-----------
+
+Most engineers use the hexadecimal numbering system because it:
+    - is more compact than binary
+    - is more simple to convert to binary than decimal
+
+The radix, as you could imagine, is 16.
+
+1234_16 is equal to:
+
+    (1 x 16^3) + (2 x 16^2) + (3 x 16^1) + (4 x 16^0)
+    4096       + 512        + 48         + 4
+    4660_10
+
+The digits used in hexadecimal are as follows:
+
+    hexadecimal |    0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
+    ------------+---------------------------------------------------------------------------------
+    decimal     |    0    1    2    3    4    5    6    7    8    9    10   11   12   13   14   15
+
+Because most computer systems don't have the ability to write a subscript to denote the radix, we need a different
+mechanism for representing hexadecimal numbers. The following is what MASM uses:
+
+    1. All hexadecimal values begin with a numeric character (0-9) and have an ``h`` suffix
+        - 123A4h
+        - 0DEADh
+    2. Binary values have a ``b`` suffix
+        - 10010b
+    3. Decimal numbers do not have a suffix
+
+The hexadecimal radix (16) is 4 times as large as the binary radix (2). Consequently, it takes 4 bits to represent the
+largest hexadecimal digit (16 == 1111). So, when converting binary to hexadecimal, each chunk of 4 bits corresponds to
+a single hexadecimal digit. The following table is everything you need to know:
+
+    Binary | Hexadecimal
+    -------+------------
+     0000  | 0
+    -------+------------
+     0001  | 1
+    -------+------------
+     0010  | 2
+    -------+------------
+     0011  | 3
+    -------+------------
+     0100  | 4
+    -------+------------
+     0101  | 5
+    -------+------------
+     0110  | 6
+    -------+------------
+     0111  | 7
+    -------+------------
+     1000  | 8
+    -------+------------
+     1001  | 9
+    -------+------------
+     1010  | A
+    -------+------------
+     1011  | B
+    -------+------------
+     1100  | C
+    -------+------------
+     1101  | D
+    -------+------------
+     1110  | E
+    -------+------------
+     1111  | F
+    -------+------------

@@ -1,0 +1,65 @@
+The AND Operation
+-----------------
+
+It's a dyadic operation, meaning it accepts exactly two operands
+
++-----------+
+|AND| 0 | 1 |
++---+---+---+
+| 0 | 0 | 0 |
++---+---+---+
+| 1 | 0 | 1 |
++-----------+
+
+The left column is the left operand and the top row is the right operand
+
+- If one of the operands is a 0, the result is 0 regardless of the other operand
+- If one of the operands is a 1, the result is exactly equal to the other operand
+
+
+The OR Operation
+-----------------
+
+It's a dyadic operation, meaning it accepts exactly two operands
+
++-----------+
+|OR | 0 | 1 |
++---+---+---+
+| 0 | 0 | 1 |
++---+---+---+
+| 1 | 1 | 1 |
++-----------+
+
+- If one of the operands is a 1, the result is 1 regardless of the other operand
+- If one of the operands is a 0, the result is exactly equal to the other operand
+
+
+The XOR (exclusive-or) Operation
+--------------------------------
+
+It's a dyadic operation, meaning it accepts exactly two operands
+
++-----------+
+|XOR| 0 | 1 |
++---+---+---+
+| 0 | 0 | 1 |
++---+---+---+
+| 1 | 1 | 0 |
++-----------+
+
+- If one of the oeprands is a 0, the result is exactly the value of the other operand
+- If one of the operands is a 1, the result is always the *inverse* of the other operand
+
+Closer to the English meaning of the word ``or`` than the logical OR operation
+
+
+The NOT Operation
+-----------------
+
+It's a monadic operation, meaning it accepts exactly one operand
+
++-----------+
+|NOT| 0 | 1 |
++---+---+---+
+    | 1 | 0 |
+    +---+---+

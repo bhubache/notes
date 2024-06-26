@@ -1,0 +1,23 @@
+2^n unsigned numbers
+-2^(n - 1) to +2^(n - 1) - 1 signed numbers
+
+The x86-64 microprocessor uses the two's complement notation to represent signed numbers. The HO (leftmost) bit is a
+sign bit.
+Sign bit == 1 == number is negative
+Sign bit == 0 == number is positive
+
+Algorithm to convert a positive number to its negative, two's complement form
+=============================================================================
+
+1. Invert all the bits in the number; that is, apply the logical NOT function
+2. Add 1 to the inverted result and ignore any carry out of the HO bit
+
+You can use the neg (negate) instruction
+
+```
+neg dest
+```
+
+which is equivalent to:
+
+    dest = -dest;
