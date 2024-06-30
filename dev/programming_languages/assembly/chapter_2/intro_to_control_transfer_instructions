@@ -1,0 +1,146 @@
+The jmp Instruction
+-------------------
+
+It takes several forms, but the most common is:
+
+    jmp statement_label
+
+where ``statement_label`` is an indentifier attached to a machine instruction in your ``.code`` section.
+The ``jmp`` instruction immediately transfers control to the statement prefaced by the label.
+
+Example of a statement label in front of a ``mov`` instruction::
+
+    stmtLbl: mov eax, 55
+
+Statement labels have to major attributes associated with them:
+1. An address
+    - The memory address of the machine instruction following the label
+2. A type, which is ``label`` (same type as the proc directive's identifier)
+
+Note: statement labels don't have to be on the same line as the machine instruction.
+
+The Conditional Jump Instructions
+---------------------------------
+
+These test a flag in the FLAGS register (carry, sign, overflow, and zero) and branch to a target label if the flag is
+set (1) or clear (0). Otherwise, the program continues execution with the next instruction.
+
++--------------------------------------+
+| Instruction | Explanation            |
+|-------------+------------------------|
+| jc label    | Jump if carry set      |
+|-------------+------------------------|
+| jnc label   | Jump if no carry       |
+|-------------+------------------------|
+| jo label    | Jump if overflow       |
+|-------------+------------------------|
+| jno label   | Jump if no overflow    |
+|-------------+------------------------|
+| js label    | Jump if sign (negative)|
+|-------------+------------------------|
+| jns label   | Jump if not sign       |
+|-------------+------------------------|
+| jz label    | Jump if zero           |
+|-------------+------------------------|
+| jnz label   | Jump if not zero       |
++--------------------------------------+
+
+Flags:
+
+Carry
+    - Set if an **unsigned** overflow occurs. Clear if no overflow occurs. Adding 0FFh and 01h causes unsigned overflow
+      1111_1111 + 0000_0001
+      Subtracting 1 from 0 clears the carry flag because it is equivalent to 0 + (-1), and -1 is 0FFh in two's
+      complement form
+
+Overflow
+    - Set if a **signed** overflow occurs, which is when the next-to-HO-bit overflows into the HO bit.
+      07Fh + 01h
+      0000_0111_1111 + 0000_0001
+
+Sign
+    - Set if the HO bit of the result is set, clear otherwise
+
+Zero
+    - Set if the result of a computation produces 0, clear otherwise
+
+Note!
+
+The logical instructions (and, or, xor, and not) always clear the following flags:
+    - carry
+    - overflow
+
+This is because the result of the operation is always the same size as the operands
+
+The cmp Instruction and Corresponding Conditional Jumps
+-------------------------------------------------------
+
+The cmp (compare) instruction essentially just does a subtraction like the sub instruction but doesn't save the result.
+
+The conditional jump instructions seen so far don't intuitively answer the question a comparison reads like:
+
+    cmp left_operand, right_operand
+
+    Is left_operand equal to right_operand?
+    Is left_operand not equal to right_operand?
+    is left_operand less than right_operand?
+    .
+    .
+    .
+    etc.
+
+Luckily, the x86-64 CPUs provide additional conditional jump instructions that do.
+
+je label
+    - jump if equal
+    - tests that the zero flag equals 1
+    - this is a synonym for ``jz``, as the zero flag will be set if the two operands are equal: their subtraction
+      produces a zero result
+
+jne label
+    - jump if not equal
+    - tests that the zero flag equals 0
+    - this is a synonym for ``jnz``, as the zero flag will be clear if the two operands are not equal: their
+      subtraction produces a non-zero result
+
+ja label
+    - jump if above (if unsigned_left_operand is greater than unsigned_right_operand)
+    - tests that the carry flag equals 0 **and** the zero flag equals 0
+
+jae label
+    - jump if above or equal (if unsigned_left_operand is greater than or equal to unsigned_right_operand)
+    - tests that the carry flag equals 0
+    - this is a synonym for ``jnc`` because unsigned underflow will not occur if left_operand is greater than or equal
+      to right_operand
+
+jb label
+    - jump if below (if unsigned_left_operand is less than unsigned_right_operand)
+    - tests that the carry flag equals 1
+    - this is a synonym for ``jc`` because unsigned underflow occurs if left_operand is less than right_operand
+
+jbe label
+    - jump if below or equal (unsigned_left_operand is less than or equal to unsigned_right_operand)
+    - tests that the carry flag equals 1 **or** the zero flag equals 1
+
+jg label
+    - jump if greater (signed left_operand is greater than signed right_operand)
+    - tests that the sign flag equals overflow flag **and** the zero flag equals 0
+
+jge label
+    - jump if greater or equal (signed left_operand is greater than or equal to signed right_operand)
+    - tests that the sign flag == overflow flag
+
+jl label
+    - jump if less (signed left_operand is less than signed right_operand)
+    - tests sign flag != overflow flag
+
+jle label
+    - jump if less or equal (signed left_operand less than or equal to signed right_operand)
+    - tests that the zero flag equals 1 **or** the sign flag != overflow flag
+
+It is important to note that there are separate instructions for testing with signed and unsigned numbers. To show why
+this is, consider teh values 0FFh (1111_1111) (255) and 01h (0000_0001) (1). Considering them to be unsigned, 0FFh is
+certainly greater than 01h. However, if we treat these as signed numbers, 0FFh is -1 and 01h is still 1, and so we can
+see that the same bit representations can have different results depending on if they're treated as signed or unsigned.
+
+MASM provides many equivalents for readability, check them out in page 74 of the book.

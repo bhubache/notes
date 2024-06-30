@@ -1,0 +1,12 @@
+little-endian: LO byte stored at the lowest address and HO byte at the highest address
+big-endian:    HO byte stored at the lowest address and LO byte at the highest address
+
+For 16-bit values you can convert big-endian to little-endian with::
+
+    xchg reg, reg
+    xchg reg, mem
+
+where reg is any 8-, 16-, 32-, or 64-bit general-purpose register and mem is any appropriate memory location.
+The operands must be the same size.
+
+Use ``bswap`` (byte swap) for larger registers

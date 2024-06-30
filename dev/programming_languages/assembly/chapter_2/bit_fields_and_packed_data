@@ -1,0 +1,31 @@
+You can make more efficient storage use by packing data in as few bits as possible.
+Doing so is space efficient but typically computationally inefficient because packing and unpacking requires extra
+instructions to translate the data into something usable.
+
+A good example of packing is the RFLAGS register.
+
+Here's a table of instructions that affect certain flags:
+
++------------------------------------------------------------------------------+
+| Instruction | Explanation                                                    |
+|-------------+----------------------------------------------------------------|
+| cld         | Clears (sets to 0) the direction flag                          |
+|-------------+----------------------------------------------------------------|
+| std         | Sets (to 1) the direction flag                                 |
+|-------------+----------------------------------------------------------------|
+| cli         | Clears the interrupt disable flag                              |
+|-------------+----------------------------------------------------------------|
+| sti         | Sets the interrupt disable flag                                |
+|-------------+----------------------------------------------------------------|
+| clc         | Clears the carry flag                                          |
+|-------------+----------------------------------------------------------------|
+| stc         | Sets the carry flag                                            |
+|-------------+----------------------------------------------------------------|
+| cmc         | Complements (inverts) the carry flag                           |
+|-------------+----------------------------------------------------------------|
+| sahf*       | Stores the AH register into the LO 8 bits of the FLAGS register|
+|-------------+----------------------------------------------------------------|
+| lahf*       | Loads AH from the LO 8 bits of the FLAGS register              |
++------------------------------------------------------------------------------+
+
+* Certain early x86-64 CPUs do not support this instruction

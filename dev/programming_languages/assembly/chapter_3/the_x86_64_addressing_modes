@@ -1,0 +1,121 @@
+An addressing mode is a mechanism the CPU uses to determine the address of a memory location an instruction will access.
+
+- Register addressing modes
+- PC-relative memory addressing modes
+- Register-indirect addressing modes: ``[reg_64]``
+- Indirect-plus-offset addressing modes: ``[reg_64 + expression]``
+- Scaled-indexed addressing modes: ``[reg_64 + reg_64 * scale]`` and ``[reg_64 + expression + reg_64 * scale]``
+
+x86_64 Register Addressing Modes
+--------------------------------
+
+These provide access to the general-purpose register set by specifying the name of the register as an operand to the
+instruction, allowing you to access its content.
+
+```
+mov ax, bx  ; Copies the value from BX into AX
+```
+
+x86-64 64-Bit Memory Addressing Modes
+-------------------------------------
+
+The PC-Relative Addressing Mode
+===============================
+
+- Most common
+- Easiest to understand
+- Also called RIP-relative
+- Consists of a 32-bit constant that the CPU adds with the current value of the RIP (instruction pointer register)
+  register to specify the address of the target location
+
+    mov al, symbol  ; PC-relative addressing mode automatically provides [RIP]
+
+where symbol is the name of a symbol you declare in one of the sections (.data, .data?, etc.)
+
+Consider
+
+```
+mov al, j
+```
+
+where ``j`` is an ``int8`` variable appearing at offset 8088h (1000_0000_1000_1000 (32,904)) from RIP. This instruction
+then will load the AL register with a copy of the byte at memory location RIP + 8088h.
+
+MASM does not directly encode the address of j into the instruction's operation code (opcode, the numeric machine
+encoding of the instruction). It instead encodes a signed displacement from the end of the current instruction's address
+to the variable's address in memory. For example, if the next instruction's opcode is in memory location 8088h (the end
+of the current instruction), MASM will encode the value 88h as a 32-bit signed constant for j in the instruction opcode.
+
+You can also access words and double words by specifying the address of their first byte.
+
+The Register-Indirect Addressing Modes
+======================================
+
+- The term indirect means the operand is not the actual address, but the operand's value specifies the memory address to
+  use
+
+```
+mov [rbx], eax
+```
+
+This tells the CPU to store the value in EAX at the location whose address is currently in RBX.
+    - The square brackets tell MASM to use the register-indirect addressing mode
+
+    mov [reg_64], al
+
+Indirect-Plus-Offset Addressing Mode
+====================================
+
+Computes an effective address by adding a 32-bit signed constant to the value of a 64-bit register.
+    - The effective address is the ultimate address in memory that an instruction will access, once all teh address
+      calculations are complete
+
+    mov [reg_64 + constant], source
+    mov [reg_64 - constant], source
+
+For example, if ``constant`` is 1100h (0001_0001_0000_0000 (4,352)) and RBX contains
+12345678h (0001_0010_0011_0100_0101_0110_0111_1000 (305,419,896)), then
+
+```
+mov [rbx + 1100h], al
+```
+
+stores AL into the byte at address 12346778h in memory.
+
+Scaled-Indexed Addressing Modes
+===============================
+
+    [base_reg_64 + index_reg_64 * scale]
+    [base_reg_64 + index_reg_64 * scale + displacement]
+    [base_reg_64 + index_reg_64 * scale - displacement]
+
+- base_reg_64 is any general-purpose 64-bit register
+- index_reg_64 represents any general-purpose 64-bit register except RSP
+- scale must be 1, 2, 4, or 8
+
+Consider
+
+```
+mov al, [rbx + rsi*4 + 2000h]
+```
+
+- RBX contains 1000FF00h
+- RSI contains 20h
+- const is 2000h
+
+This will move the byte at address (1000FF00h + (20h * 4) + 2000) = 10011F80h into the AL register
+
+Good for
+    - accessing array elements that are 2, 4, or 8 bytes
+    - accessing elements of an array when you have a pointer to the beginning of the array
+
+Large Address Unaware Applications
+----------------------------------
+
+64-bit addresses can access a frightfully large amount of memory (something like 8TB under Windows).
+By default, the Microsoft linker sets a flag named ``LARGEADDRESSAWARE`` to true (yes). This makes it possible for the
+program to access a huge amount of memory.
+
+There is a price to be paid though.
+In this mode, the const component of the [reg_64 + const] addressing mode is limited to 32 bits and cannot span the
+entire address space. This is due to instruction-encoding limitations.

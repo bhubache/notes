@@ -1,0 +1,16 @@
+You can organize your variable declarations in the source code to try and make sure the data is aligned properly, but
+this makes the code more difficult to read as variables likely won't be grouped by their intent. So...
+
+MASM provides the ``align`` directive::
+
+    align integer_constant
+
+where ``integer_constant`` must be one of the following small unsigned integer values:
+    1, 2, 4, 8, 16
+
+The size of your program will increase due to the padding used to align data but it will run faster.
+A general rule to have the fastest possible access is to align the value with a value equal to the size of the object
+you want to align.
+
+The cache architecture of modern x86-64 CPUs handles most misaligned data so you should only concern yourself with
+aligning variables for which quick access is absolutely critical.

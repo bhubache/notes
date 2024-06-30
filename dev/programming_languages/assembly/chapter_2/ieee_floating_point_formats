@@ -1,0 +1,104 @@
+Single-Precision Format
+-----------------------
+
+- one's complement 24-bit mantissa
+- 8-bit excess-127 exponent
+- single sign bit
+
+The mantissa usually represents a value from 1.0 to just under 2.0.
+The HO bit of the mantissa is always assumed to be 1 and represents a value just to the left of the binary point (the
+binary equivalent of the decimal point).
+
+Because the HO bit is always assumed to be 1, it isn't stored.
+There are an infinite number of values between 1 and 2 but we can only represent 8 million of them because we use a
+23-bit mantissa (with the implied 24th bit always 1), hence the innaccuracy in floating-point arithmetic.
+
+The 24-bit mantissa is an unsigned binary number and the sign bit determines whether the value is positive or negative.
+One's complement has the unusual property that there are two representations for 0:
+    - one with the sign bit set
+    - one with the sign bit clear
+
+We will assume that 0 always has the sign bit clear
+
+The exponent portion comes into play when you want to represent values outside the range 1.0 to just under 2.0.
+The format raises 2 to the power specified by the exponent and then multiplies the mantissa by this value.
+The exponent is 8 bits and is stored in an excess-127 format.
+    - 0 is represented by the value 127 (7Fh)
+    - negatives are in the range 0 - 126
+    - positives are in the range 128 - 255
+
+To convert an exponent to excess-127 format, simply add 127.
+This format makes it easier to compare floating-point values.
+
+
+31 30 29 28 27 26 25 24 23 22 21 20 19 18 17 16 15 14 13 12 11 10 09 08 07 06 05 04 03 02 01 00
+\/
+Sign bit
+   \_____________________/ \__________________________________________________________________/
+     Exponent bits                                   Mantissa bits
+
+        The 23rd bit is the implied always 1
+
+You get approximately 6 and a half decimal digits of precision.
+Half a digit of precision means taht the first six can all be in the range 0 to 9 but the seventh digit can only be in
+the range 0 to x where x < 9 and is generally close to 5.
+The dynamic range is approximately 2^(+- 127)
+The dynamic range is the difference in size between the smallest and largest positive values
+
+Double-Precision Format
+-----------------------
+
+- 64 bits
+- 11-bit excess-1023 exponent
+- 53-bit mantissa (with implied HO bit of 1)
+- plus a sign bit
+- dynamic range of about 10^(+- 308)
+- 14.5 digits of precision
+
+Extended-Precision Format
+-------------------------
+
+- 80 bits
+- 64-bit mantissa
+- 15-bit excess-16383 exponent
+- sign bit
+- There is no implied HO bit
+
+Normalized Floating-Point Values
+--------------------------------
+
+Normalized values are used to maintain maximum precision during computation.
+
+HO mantissa bit contains 1.
+
+Almost any non-normalized value can be normalized: just shift the mantissa bits to the left while decrementing the
+exponent by one until a 1 bit is in the HO mantissa bit contains 1.
+
+There are two important cases were a number can't be normalized
+1. 0, because there are no 1s. However, this isn't an issue because it's value can be represented exactly with 1 bit
+2. There are some HO bits in the mantissa that are 0 but the exponent is also 0 and so we can't decrement it.
+   Denormalized values are used in their place. These do however offer less precision
+
+Non-Numeric Values
+------------------
+
+- -infinity
+- +infinity
+- not-a-number (NaN)
+
+For all of these the exponent field is filled with all 1 bits
+
+If the exponent is all 1 bits and the mantissa all 0 bits, then the value is infinity.
+- sign bit of 1 for -infinity
+- sign bit of 0 for +infinity
+
+If the exponent is all 1 bits and the mantissa is not all 0 zero bits, then the value is an invalid number (NaN)
+
+MASM Support for Floating-Point Values
+--------------------------------------
+
+Floating point constants allow the following system:
+    - An optional + or - symbol, denoting the sign of the mantissa
+    - followed by one or more decimal digits
+    - followed by a decimal point and zero or more decimal digits
+    - optionally followed by an ``e`` or ``E``, optionally followed by a sign (+ or -) and one or more decimal digits

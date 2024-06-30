@@ -1,0 +1,141 @@
+Some common data classifications:
+
+Code
+    - Memory values that encode machine instructions
+    - Marked read-only by the OS
+
+Uninitialized static data
+    - An area in memory set aside by the program for uninitialized variables that exist for the entirety of the
+      program's execution
+    - Window's initializes the storage area to 0s when it loads the program into memory
+
+Initialized static data
+    - A section of memory that also exists for the entirety of the program's execution
+    - Windows loads values from the program's executable file so they have an initial value when the program begins
+      execution
+
+Read-only data
+    - Windows loads values from the program's executable file so they have an initial value when the program begins
+      execution
+    - Marked read-only
+    - Programs typically store constants and other unchanging data here
+
+Heap
+    - Holds dynamically allocated storage
+    - Functions such as C's malloc and free functions are responsible for this
+
+Stack
+    - The program maintains local variables for:
+        - procedures and functions
+        - program state information
+        - other transient data
+
+The stack and heap sections are normally provided by the OS.
+
+The .code Section
+-----------------
+
+- Contains machine instructions that appear in a MASM program
+    - MASM translates each instruction into a sequence of one or more bytes
+    - The CPU then interprets these byte values as machine instructions during program execution
+- By default, when MASM links your program it makes the code segment:
+    - executable
+    - readable
+    - **not** writable
+        - An attempt to write to the code segment will cause the OS to generate a general protection fault
+
+The .data Section
+-----------------
+
+- Where you typically put variables
+
+```
+    .data
+varName byte 0
+        byte 1,2,3
+```
+
+Values are written to this segment after the preceding variables:
+    - Above, you would first have the byte 0 associated with the name ``varName``
+    - The byte values 1, 2, and 3 cannot be accessed directly because there aren't labels associated with them
+        - You can however use the indexed addressing modes to access them
+
+```
+    .data
+varName byte ?
+```
+
+Here, ``varName`` does not have an explicit initial value so MASM will initialize the variables with the value 0.
+**Variable declarations always consume memory, even if you haven't assigned them an initial value.**
+
+The .const Section
+------------------
+
+- Holds constants, tables, and other data that the program can't modify during execution
+- Similar to the .data section with three differences:
+    1. The section begins with .const rather than .data
+    2. All declarations have an initializer
+    3. The system does not allow you to write dta to variables while the program is running
+
+The .data? Section
+------------------
+
+- Lets you declare variables that are always uninitialized when the program begins running
+    - Windows initializes all objects to 0 when it loads the program into memory
+- Variables declared here may consume less disk space in the executable file
+
+Organization of Declaration Sections Within Your Programs
+---------------------------------------------------------
+
+The ``.data``, ``.const``, ``.data?``, and ``.code`` sections may appear zero or more times and in any order.
+When more than one declaration section appears in your program, MASM combines them into a single group in any order it
+pleases.
+
+Memory Access and 4K Memory Management Unit Pages
+-------------------------------------------------
+
+The x86-64's memory management unit (MMU) divides memory into 4096-byte blocks known as pages.
+Management of pages is the responsibility of the OS.
+
+Each program section appears in memory in contiguous MMU pages.
+If a section doesn't take up an integral number of pages, padding space will be present between the end of that
+section's data to the end of its last page to ensure the next section begins on an MMU page boundary. This is because
+the MMU has page granularity for memory access.
+The MMU controls whether a page in memory is readable/writable or read-only.
+To make this concrete, because the .const section should be read-only and the .data section is readable and writable,
+.data section information cannot be in the same page as .const section information, because the MMU can only enforce
+readability/writability on a page-by-page basis.
+
+Most of this is transparent to your code, but there is one situation where you have to worry about this:
+Reading data beyond the end of a data structure in memory.
+
+If the data structure is aligned with the end of an MMU page, accessing the next page could be problematic as some pages
+are not readable, writable, or executable. Attempting to do so will result in a general protection (segmentation) fault
+and abort the normal execution of your program.
+
+How MASM Allocates Memory for Variables
+---------------------------------------
+
+- MASM associates a current *location counter* with each of the four declaration sections
+- These initially contain 0 and whenever you declare a variable (or write code in a code section):
+    - MASM associates the current value of that section's location counter with the variable
+    - MASM bumps up the value of the location counter by the size of the object you're declaring
+
+Assuming the following is the only .data section in a program:
+
+```
+    .data
+a   byte    ?       ; location counter = 0, size = 1
+w   word    ?       ; location counter = 1, size = 2
+d   dword   ?       ; location counter = 3, size = 4
+q   qword   ?       ; location counter = 7, size = 8
+o   oword   ?       ; location counter = 15, size = 16
+                    ; location counter is now 31
+```
+
+At runtime, the system loads each section to a base address in memory. The linker and Windows add the base address of
+the memory section to each of the location counter values (which we will call displacements or offsets) to produce the
+actual memory address of the variables.
+
+You cannot assume data declared in different sections, event if they're adjacent in the source code, will be adjacent in
+memory. You must declare data in the same section for this guarantee.

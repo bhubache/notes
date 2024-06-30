@@ -1,0 +1,57 @@
+The jmp Instruction
+-------------------
+
+It takes several forms, but the most common is:
+
+    jmp statement_label
+
+where ``statement_label`` is an indentifier attached to a machine instruction in your ``.code`` section.
+The ``jmp`` instruction immediately transfers control to the statement prefaced by the label.
+
+Example of a statement label in front of a ``mov`` instruction::
+
+    stmtLbl: mov eax, 55
+
+Statement labels have to major attributes associated with them:
+1. An address
+    - The memory address of the machine instruction following the label
+2. A type, which is ``label`` (same type as the proc directive's identifier)
+
+Note: statement labels don't have to be on the same line as the machine instruction.
+
+The Conditional Jump Instructions
+---------------------------------
+
+These test a flag in the FLAGS register (carry, sign, overflow, and zero) and branch to a target label if the flag is
+set (1) or clear (0). Otherwise, the program continues execution with the next instruction.
+
++--------------------------------------+
+| Instruction | Explanation            |
+|-------------+------------------------|
+| jc label    | Jump if carry set      |
+|-------------+------------------------|
+| jnc label   | Jump if no carry       |
+|-------------+------------------------|
+| jo label    | Jump if overflow       |
+|-------------+------------------------|
+| jno label   | Jump if no overflow    |
+|-------------+------------------------|
+| js label    | Jump if sign (negative)|
+|-------------+------------------------|
+| jns label   | Jump if not sign       |
+|-------------+------------------------|
+| jz label    | Jump if zero           |
+|-------------+------------------------|
+| jnz label   | Jump if not zero       |
++--------------------------------------+
+
+Flags:
+
+Carry
+    - Set if an **unsigned** overflow occurs. Clear if no overflow occurs. Adding 0FFh and 01h causes unsigned overflow
+      1111_1111 + 0000_0001
+      Subtracting 1 from 0 clears the carry flag because it is equivalent to 0 + (-1), and -1 is 0FFh in two's
+      complement form
+
+Overflow
+    - Set if a **signed** overflow occurs.

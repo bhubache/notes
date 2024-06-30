@@ -1,0 +1,5 @@
+Allows you to declare variables in a section without allocating memory for the variable.
+MASM will assign the current address in a declaration section to a variable and that's it.
+That variable shares the same memory address as the next object appearing the declaration section.
+
+    *variable_name* label *type*

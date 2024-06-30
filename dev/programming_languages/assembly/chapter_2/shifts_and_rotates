@@ -1,0 +1,33 @@
+Shift left using:
+
+    shl dest, count
+
+The count operand is either the CL register or a constant in the range 0 to n, where n is one less than the number of
+bits in the destination operand (n = 7 for 8-bit operands).
+
+Shift right using:
+
+    shr dest, count
+
+This is a logical shift right and will not work with negative numbers because the HO bit is replaced with a 0.
+To perform a proper shift right with negative numbers, you must arithmetic shift right, which copies the HO bit into
+itself.
+There is no need for an arithmetic shift left.
+
+The arithmetic shift right is generally correct, but it rounds to the nearest integer that is less than or equal to the
+actual result. For example, an arithmetic shift right on -1 (0FFh) results in -1 not 0.
+
+x86-64 provides an arithmetic shift right (shift arithmetic right):
+
+    sar dest, count
+
+Rotations are the same as shifts except that the bit shifted out from one end is shifted back in at the other end.
+
+    rol dest, count
+    ror dest, count
+
+Rotate through carry left and rotate through carry right shifts the output bit through the carry and shifts the
+previous carry value back into the input bit of the shift operation.
+
+    rcl dest, count
+    rcr dest, count
