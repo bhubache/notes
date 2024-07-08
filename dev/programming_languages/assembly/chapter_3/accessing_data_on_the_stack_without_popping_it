@@ -1,0 +1,28 @@
+You may want to:
+1. Get a copy of the data on the stack without popping
+2. Change the value of data without popping
+
+The x86-64 [reg_64 +- offset] addressing mode provides the mechanism for this
+
+
+                            +---------------+
+                            |               | RSP + 40
+                            +---------------+
+                            |               | RSP + 32
+                            +---------------+
+                            |               | RSP + 24
+                            +---------------+
+                            |               | RSP + 16
+                            +---------------+
+                            |   RAX value   | RSP + 8
+                            +---------------+
+             RSP -------->  |   RBX value   | RSP + 0
+                            +---------------+
+                            |               | RSP - 8
+                            +---------------+
+                            |               | RSP - 16
+                            +---------------+
+
+```
+mov rax, [rsp + 8]
+```

@@ -1,0 +1,44 @@
+Type coercion is the process of telling MASM that you want to treat an object as an explicit type, regardless of its
+actual type. Consider the following:
+
+```
+            .data
+byte_values label byte
+            byte  0, 1
+
+mov ax, byte_values
+```
+
+A programmer may want to do this because they want to load AL with 0 and AH with 1 using a single instruction.
+MASM will refuse, claiming type mistmatch (because byte_values is a byte object and AX is a word object).
+
+Type coercion is used like the following::
+
+    new_type_name ptr address_expression
+
+Which means you want to associate ``new_type_name`` with the memory location specified by ``address_expression``.
+You can use this coercion anywhere a memory address is legal.
+
+A correct version of the previous example would look like:
+
+```
+mov ax, word ptr byte_values
+```
+
+Type coercion is necessary when you specify and anonymous variable as the operand to an instruction that directly
+modifies memory (neg, shl, not, and so on).
+
+```
+not [rbx]
+```
+
+This is invalid because the program doesn't know if it should invert the bits in
+- the byte pointed at by RBX
+- the word pointed at by RBX
+- the double word pointed at by RBX
+- or the quad word pointed at by RBX
+
+```
+not byte ptr [rbx]
+not dword ptr [rbx]
+```

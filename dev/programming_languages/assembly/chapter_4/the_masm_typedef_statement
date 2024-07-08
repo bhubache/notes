@@ -1,0 +1,15 @@
+Let's you create aliases.
+
+    new_type_name typedef existing_type_name
+
+```
+integer typedef sdword
+float   typedef real4
+double  typedef byte
+colors  typedef byte
+
+           .data
+i          integer ?
+x          float   1.0
+HouseColor colors ?
+```

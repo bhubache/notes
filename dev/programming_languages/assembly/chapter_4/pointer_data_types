@@ -1,0 +1,30 @@
+A pointer is a memory location whose value is the address of another memory location.
+
+Using Pointers in Assembly Language
+-----------------------------------
+
+A MASM pointer is a 64-bit value that may contain the address of another variable.
+For example, if you have a dword variable p that contains 1000_0000h, then p "points" at memory location 1000_0000h.
+To access the dword that p points at, you could use code like the following:
+
+```
+mov rbx, p     ; Load RBX with the value of pointer p
+mov rax, [rbx] ; Fetch the data that p points at
+```
+
+Declaring Pointers in MASM
+--------------------------
+
+You just need a qword because pointers are 64-bits long, but its arguably better to use typedef to create a pointer type:
+
+```
+        .data
+pointer typedef qword
+```
+
+Pointer Constants and Pointer Constant Expressions
+--------------------------------------------------
+
+offset StaticVarName [PureConstantExpression]  ; equivalent to the one below it
+offset StaticVarName + PureConstantExpression
+offset StaticVarName - PureConstantExpression

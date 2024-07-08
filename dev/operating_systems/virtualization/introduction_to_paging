@@ -1,0 +1,12 @@
+Chop up space into fixed-sized pieces.
+
+We view physical memory as an array of fixed-sized slots called page frames: each of which contains a single
+virtual-memory page.
+
+The Crux: How To Virtualize Memory With Pages
+---------------------------------------------
+
+How can we virtualize memory with pages, so as to avoid the problems of segmenation? What are the basic techniques? How
+do we make those techniques work well, with minimal space and time overheads?
+
+

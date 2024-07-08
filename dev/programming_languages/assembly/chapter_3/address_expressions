@@ -1,0 +1,18 @@
+When accessing an element of an array or a field of a structure/record, the exact element or field is probably not at
+the address of the variable itself. Address expressions therefore, provide a mechanism to access memory around a
+variable's address.
+
+An address expression is an legal x86-64 addressing mode that includes a displacement (that is, variable name) or an
+offset.
+
+[reg_64 + offset]
+[reg_64 + reg_not_RSP_64 * scale + offset]
+variable_name[offset]  ; add the constant offset within the brackets to the variable's address
+
+```
+mov al, Address[3]  ; loads the AL register with the byte in memory that is 3 bytes beyond the Address object
+```
+
+offset must be a constant.
+Note: the offset is a byte address, and while the syntax looks like array indexing in a high-level language, it would
+only properly index into an array if Address is an array of bytes.

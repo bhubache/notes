@@ -1,0 +1,4 @@
+1. Always pop values in the reverse order that you push them (if you wish to preserve the register's as the were before)
+2. Always pop exactly the same number of bytes that you push
+3. The Microsoft ABI requires the stack to be aligned on a 16-byte boundary
+    - make sure this is the case before calling any functions or procedures that adhere to the Microsoft ABI

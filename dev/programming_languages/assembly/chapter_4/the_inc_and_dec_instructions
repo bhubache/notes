@@ -1,0 +1,7 @@
+inc mem/reg
+dec mem/reg
+
+The operand can be any legal 8-, 16-, 32-, or 64-bit register or memory operand.
+
+Shorter than the corresponding add/sub instructions (their encoding uses fewer bytes)
+They do not affect the carry flag

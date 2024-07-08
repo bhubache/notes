@@ -1,0 +1,2 @@
+Adjust the RSP register to skip over the unwanted data on the stack.
+You can do this by adding the size of the item at the top of the stack to the RSP register.

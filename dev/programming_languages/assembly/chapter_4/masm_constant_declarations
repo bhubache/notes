@@ -1,0 +1,191 @@
+MASM provides three directives for defining constants. Collectively known as equates.
+
+Manifest Constants
+------------------
+
+    symbol = constant_expression
+    MaxIndex = 15
+
+These can be used anywhere the literal constant is legal.
+MASM will substitute constant_expression wherever is sees symbol.
+You can redefine the value using the ``=`` directive though at runtime its value will be the last value assigned to it
+Must be representable as a 64-bit, or smaller, integer.
+
+Different from variable in .const section because a variable in .const has a memory location associated with it and it
+being read-only is enforced by the operating system, not the MASM compiler.
+
+The equ directive
+=================
+
+    symbol equ constant_expression
+
+Also defines a manifest constant.
+You cannot change the value either at runtime or assembly time.
+No limit to the size.
+If the operand cannot be converted to a numeric value, the directive will save its operand as textual data.
+
+This can be strange to deal with. Consider the following:
+
+```
+SomeStr equ "abcdefgh"
+
+memStr byte SomeStr
+```
+
+MASM will report an error. Because the string fits in a 64-bit value, MASM converted the string into a quad-word
+constant rather than a string of characters.
+The resulting 64-bit integer (8 bytes total and each character is 1 byte and there are 8 characters) cannot fit in a
+byte.
+
+If we had this instead
+
+```
+SomeStr equ "abcdefghi"
+
+memStr byte SomeStr
+```
+
+This works without issue because the 9 byte string of characters does not fit into a 64-bit value so it treats it as a
+text operand rather than a numeric operand.
+
+There are two solutions if you want a string of 8 or fewer characters using the equ directive.
+1. Surround the operand with text delimiters (``<`` and ``>``)
+    SomeStr equ <"abcdefgh">
+2. You can use the third directive show below
+
+The textequ directive
+---------------------
+
+The operand must always have text delimiters
+
+```
+SomeStr textequ <"abcdefgh">
+
+memStr byte SomeStr
+```
+
+```
+maxCount =       10
+max      textequ <maxCount>
+max      =       max+1
+
+; Now max equals 11
+```
+
+Constant Expressions
+====================
+
+The above directives don't have to just by a literal constant, they can be expressions. Page 153-154 has a table with
+the allowed operations in a constant expression.
+
+this and $ Operators
+====================
+
+These are roughly synonyms for one another.
+Returns the curret offset into the section containing them (the location counter).
+
+    someLabel equ $ ; sets the label's offset to the current location in the program. Has type ``statement label`` like
+                    ; proc
+
+Typically used for branch labels and advanced features.
+
+```
+jmp $ ; "$" is equivalent to the address of the jmp instruction, creating an infinite loop
+```
+
+```
+jmp $+5 ; Skip to a position 5 bytes beyond the jmp. To be used in a meaningful way requires knowing the number of bytes
+        ; of machine code each machine instruction compiles into.
+```
+
+A practical use is to compute the size of a block of data declarations in the source file:
+
+```
+someData     byte 1, 2, 3, 4, 5
+sizeSomeData =    $-someData
+```
+
+``$`` has a default type of statement label while ``this`` allows you to specify a type.
+
+The following are equivalent:
+
+```
+someLabel label byte
+someLabel equ   this byte
+```
+
+Constant Expression Evaluation
+==============================
+
+MASM substitutes the evaluated value of an expression with the symbol during compilation.
+
+Common Pointer Problems
+-----------------------
+
+Using an uninitialized pointer
+==============================
+
+```
+nl = 10
+
+       .const
+fmtStr byte "Pointer value= %p", nl, 0
+
+       .data
+ptrVar qword    ?
+
+       .code
+sub    rsp, 48     ; Magic
+
+lea    rcx, fmtStr
+mov    rcx, ptrVar
+mov    rdx, [rdx]  ; Will crash system
+call   printf      ; Assume printf is setup to be called correctly
+
+add    rsp, 48     ; Magic
+```
+
+ptrVar is initialized to 0, which is NULL.
+There is no such thing as truly uninitialized variales on x86-64. You have variables that are explicitly given an
+initial value and variables that just happen to inherit whatever bit pattern was in memory when storage for the variable
+was allocated. Most of the time, these garbage bit patterns don't correspond to a valid memory address. A memory access
+violation exception would be raised if an access on such an address were made.
+Sometimes though, a garbage bit pattern happens to be a valid memory address. Using the address in this case can lead to
+very difficult-to-fix bugs, like if you were to store data through the uninitialized pointer, possibly overwriting other
+important variables in memory.
+
+Storing Invalid Addresses in Pointers
+=====================================
+
+The previous problem is a special case of this. Same effects as that.
+
+Continuing to Use Malloc()'d Storage After That Storage Has Been Freed (Danging Pointer Problem)
+================================================================================================
+
+Can lead to:
+1. Reading data that has been overwritten
+2. Overwriting the new data (if new data has been malloced and the address is reused)
+3. Overwriting system heap management pointers (which will probably cause your program to crash)
+
+Failing to Free Allocated Storage
+=================================
+
+```
+mov rcx, 256
+call malloc
+mov ptrvar, rax
+. ; Code that uses ptrVar.
+. ; This code does not free up the storage
+. ; associated with ptrVar.
+mov rcx, 512
+call malloc
+mov ptrVar, rax
+
+; At this point, there is no way to reference the original
+; block of 256 bytes pointed at by ptrVar.
+```
+
+Accessing Indirect data by Using the Wrong Data Type
+====================================================
+
+

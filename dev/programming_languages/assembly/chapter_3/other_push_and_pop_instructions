@@ -1,0 +1,11 @@
+pushf
+pushfq
+popf
+popfq
+
+These push and pop the RFLAGS register which allow you to preserve condition code and other flag settings.
+Pushes and pops does so with all the flags, you can't push/pop individual flags.
+
+You should really use the pushfq and popfq instructions to push the full 64-bit version of the RFLAGS register (rather
+than only the 16-bit RFLAGs portion). Although the extra 48 bits are essentially ignored when writing applications, you
+want to keep the stack aligned.

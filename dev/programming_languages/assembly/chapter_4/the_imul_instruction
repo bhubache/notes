@@ -1,0 +1,32 @@
+Integer multiply.
+
+The forms of interest right now are as follows:
+
+; The following computes destreg = destreg * constant;
+
+imul destreg_16, constant
+imul destreg_32, constant
+imul destreg_64, constant_32
+
+; The following computes dest = src * constant
+
+imul destreg_16, srcreg_16, constant
+imul destreg_16, srcmem_16, constant
+
+imul destreg_32, srcreg_32, constant
+imul destreg_32, srcmem_32, constant
+
+imul destreg_64, srcreg_64, constant_32
+imul destreg_64, srcmem_64, constant_32
+
+; The following computes dest = destreg * src;
+
+imul destreg_16, srcreg_16
+imul destreg_16, srcmem_16
+imul destreg_32, srcreg_32
+imul destreg_32, srcmem_32
+imul destreg_64, srcreg_64
+imul destreg_64, srcmem_64
+
+Only uses signed integer values.
+Only sets the carry and overflow flags.

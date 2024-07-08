@@ -1,0 +1,118 @@
+x86-64 maintains the stack in the stack segment of memory.
+The stack is a dynamic data structure that grows and shrinks according to certain needs of the program.
+It also stores important information about the program including:
+    - local variables
+    - subroutine information
+    - temporary data
+
+Stack is controlled via the RSP (stack pointer) register.
+When the program begins execution, the OS initializes RSP with the address of the last memory location in the stack
+memory segment.
+
+The Basic push Instruction
+--------------------------
+
+push  reg_16
+push  reg_64
+push  memory_16
+push  memory_64
+pushw constant_16
+push  constant_32  ; Sign extends constant_32 to 64 bits
+
+The push instruction does the following::
+
+    RSP   := RSP - size_of_register_or_memory_operand (2 or 8)
+    [RSP] := operand's_value
+
+
+```
+push rax
+```
+
+                            +---------------+
+                            ||||||||||||||||| 00FF_FFFF (0000_0000_1111_1111_1111_1111_1111_1111) (16_777_215)
+                            +---------------+
+                            ||||||||||||||||| 00FF_FFFE (0000_0000_1111_1111_1111_1111_1111_1110) (16_777_214)
+                            +---------------+
+                            ||||||||||||||||| 00FF_FFFD (0000_0000_1111_1111_1111_1111_1111_1101) (16_777_213)
+                            +---------------+
+RSP (before push) ------->  |               | 00FF_FFFC (0000_0000_1111_1111_1111_1111_1111_1100) (16_777_212)
+                            +--           --+
+                            |               | 00FF_FFFB (0000_0000_1111_1111_1111_1111_1111_1011) (16_777_211)
+                            +--           --+
+                            |      RAX      | 00FF_FFFA (0000_0000_1111_1111_1111_1111_1111_1010) (16_777_210)
+                            +--           --+
+                            |     value     | 00FF_FFF9 (0000_0000_1111_1111_1111_1111_1111_1001) (16_777_209)
+                            +--           --+
+                            |      on       | 00FF_FFF8 (0000_0000_1111_1111_1111_1111_1111_1000) (16_777_208)
+                            +--           --+
+                            |     stack     | 00FF_FFF7 (0000_0000_1111_1111_1111_1111_1111_0111) (16_777_207)
+                            +--           --+
+                            |               | 00FF_FFF6 (0000_0000_1111_1111_1111_1111_1111_0110) (16_777_206)
+                            +--           --+
+                            |               | 00FF_FFF5 (0000_0000_1111_1111_1111_1111_1111_0101) (16_777_205)
+                            +--           --+
+RSP (after push) -------->  |               | 00FF_FFF4 (0000_0000_1111_1111_1111_1111_1111_0100) (16_777_204)
+                            +---------------+
+                            |               | 00FF_FFF3 (0000_0000_1111_1111_1111_1111_1111_0011) (16_777_203)
+                            +---------------+
+                            |               | 00FF_FFF2 (0000_0000_1111_1111_1111_1111_1111_0010) (16_777_202)
+                            +---------------+
+
+For maximum performance, the stack pointer's value should always be a multiple of 8. Your program may actually
+malfunction under a 64-bit OS if RSP contains a value that is not a multiple of 8.
+The only practical reason for pushing fewer than 8 bytes at a time is to build up a quad word via four successive word
+pushes.
+
+The Basic pop Instruction
+-------------------------
+
+Used to retrieve data you've pushed on to the stack
+
+The basic pop instruction allows the following forms::
+
+    pop reg_16
+    pop reg_64
+    pop memory_16
+    pop memory_64
+
+One major difference between push and pop is that you cannot pop a constant value, which makes sense becuse the operand
+for push is a source operand while the operand for pop is a destination operand (you won't have a constant as a
+destination operand.)
+
+Here's what pop does::
+
+    operand := [RSP]
+    RSP     := RSP + size_of_operand (2 or 8)
+
+**Note: the value popped from the stack is still present in memory, popping a value just moves the stack pointer. You
+should never attempt to access a value you've popped off the stack.
+1. The next time you push to the stack, the popped value will be obliterated
+2. Your code isn't the only thing that uses the stack
+    - the OS
+    - subroutines
+   so you can't rely on data remaining in stack memory once you've popped it off the stack.**
+
+Preserving Registers with the push and pop Instructions
+-------------------------------------------------------
+
+Because registers are the best place to hold temporary values, and registers are also needed for the various addressing
+modes, it is easy to run out of registers when writing code that performs complex calculations.
+
+Imagine your program needs to do something like the following:
+
+1. Some instructions that use the RAX register
+2. Some isntructions that need RAX for a different purpose
+3. Some instructions that need the original value in RAX
+
+You can utilize the stack for this as follows:
+
+1. Some instructions that use the RAX register
+
+    push rax
+
+2. Some isntructions that need RAX for a different purpose
+
+    pop rax
+
+3. Some instructions that need the original value in RAX
