@@ -1,0 +1,7 @@
+Also known as aggregate data types are data types built up from other (usually scalar) data types.
+These include data types such as:
+    - character strings
+    - arrays
+    - multi-dimensional arrays
+    - records/structs
+    - unions

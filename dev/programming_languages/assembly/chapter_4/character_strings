@@ -1,0 +1,94 @@
+Generally, a character string is a sequence of ASCII characters that possesses two main attributes:
+1. length
+2. character data
+
+Assembly language doesn't really care how you implement strings, all you need to do is create a sequence of machine
+instructions to process the string data in whatever format the strings take.
+
+Zero-Terminated Strings
+-----------------------
+
+A sequence of zero or more ASCII characters ending with a 0 byte.
+
+The string "abc" requires 4 bytes: the three characters, ``a``, ``b``, and ``c`` followed by a ``0``.
+
+Create a zero-terminated string in MASM as follows:
+
+```
+           .data
+zeroString byte "This is the zero-terminated string", 0
+```
+
+Pros
+====
+
+- Simple to implement
+- Can be any length
+
+Cons
+====
+
+1. Cannot contain the NUL character (ASCII code 0)
+2. Many operations on them are somewhat inefficient
+
+Length-Prefix Strings
+---------------------
+
+Generally consist of a length byte followed by zero or more character values.
+
+The string "abc" requires 4 bytes: ``03`` (the string length) followed by ``a``, ``b``, and ``c``.
+
+Create a length-prefixed string in MASM as follows:
+
+```
+    .data
+lengthPrefixedString label byte;
+    byte 3, "abc"
+```
+
+Pros (solves the 2 major problems of zer-terminated strings)
+============================================================
+
+1. You can include the NUL character
+2. The operations that are somewhat inefficient with zero-terminated strings are more efficient
+
+Cons
+====
+
+1. Limited to a maximum of 255 characters in length (assuming a 1-byte length prefix)
+
+It's a major pain to manually count the length of your string to prefix it with the length in the source code. This can
+be automated using the location counter operator ``$``.
+
+```
+    .data
+lengthPrefixedString label byte;
+    byte lpsLen, "abc"
+lpsLen = $-lengthPrefixedString-1
+```
+
+String Descriptors
+------------------
+
+Another common string format.
+Typically a small data structure (record or structure) containing pieces of information describing the string, possibly:
+1. a pointer to the actual string data
+2. field specifying the number of characters in the string (the string's length)
+3. number of bytes currently occupied by the string
+    - the number of bytes could differ from the number of characters if the encoding includes multi-byte character
+      sequences (like with UTF-8 or UTF-16)
+4. the maximum number of bytes the string could occupy
+5. the string encoding
+6. any other information the string data structure's designer could dream up
+
+Pointers to Strings
+-------------------
+
+You typically deal with pointers to strings using two registers:
+1. one to point to the string (referred to as the base register)
+2. another to access individual characters (referred to as the index register)
+
+String Functions
+----------------
+
+These are covered more in depth in chapter 14.

@@ -1,0 +1,84 @@
+An aggregate data type whose members (elements) are all the same type.
+Selection of a member uses an integer index (or a value whose underlying representation is an integer)
+This book assumes that the integer indices are contiguous (though this is by no means required)
+The base address is the address of the first element and always appears in the lowest memory location
+Indices are not required to start at zero
+
+To access an element, we need a function that translates an index to the coresponding address.
+For a single-dimensional array, this function is simple:
+
+    element_address = base_address + ((index - initial_index) * element_size)
+
+where element_size is in bytes.
+
+Declaring Arrays in Your MASM Programs
+--------------------------------------
+
+    array_name base_type n dup (?)
+
+- array_name: the name of the variable
+- base_type: type of the element (byte, word, etc.)
+- n dup (?): this operand tells MASM to duplicate the object n times
+
+```
+    .data
+
+; Character array with elements 0 to 127
+
+CharArray byte 128 dup (?)
+```
+
+The above example allocates storage for an uninitialized array.
+
+```
+; Create array with all elements having the same initial value
+; It doesn't have to be a ``?`` in the parantheses of the dup operand
+RealArray real4 8 dup (1.0)
+
+; In fact, you can put a comma separated list
+; 1.0, 2.0, 1.0, 2.0, 1.0, 2.0, 1.0, 2.0
+
+RealArray real4 4 dup (1.0, 2.0)
+```
+
+Accessing Elements of a Single-Dimensional Array
+------------------------------------------------
+
+Recall the function:
+
+    element_address = base_address + ((index - initial_index) * element_size)
+
+which for a zero-based array simplifies to:
+
+    element_address = base_address + (index * element_size)
+
+eax = IntegerArray[index] (MASM equivalents below)
+
+LARGEADDRESSAWARE:NO Mode
+=========================
+
+You can use the name of the array for ``base_address`` because MASM associates the address
+of the first element of an array with the name of that array.
+
+```
+mov rbx, index
+mov eax, IntegerArray[rbx*4]
+```
+
+LARGEADDRESSAWARE:YES Mode
+==========================
+
+You need to load the base address of the array into a 64-bit (base) register, for example:
+
+    lea rbx, base_address
+
+```
+lea rdx, IntegerArray   ; load the base address of the array into a 64-bit register
+mov rbx, index
+mov eax, [rdx + rbx*4]
+```
+
+Sorting an Array of Values
+--------------------------
+
+Read over the bubble sort code again starting on page 185

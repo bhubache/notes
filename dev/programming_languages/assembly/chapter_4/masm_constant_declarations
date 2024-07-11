@@ -188,4 +188,4 @@ mov ptrVar, rax
 Accessing Indirect data by Using the Wrong Data Type
 ====================================================
 
-
+Like reading past the malloced amount of data.
