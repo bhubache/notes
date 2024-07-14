@@ -6,30 +6,61 @@ The x86-64 CPUs can be broken down into 4 categories:
 4. special-purpose kernel-mode registers
 
 The <name_one>|<name_two> syntax means <name_one> refers to bits 0-15
+* means the register is nonvolatile and must be preserved across procedure/function calls
 
 There are 16 64-bit registers.
 
-63............................31...............15.......7......0
-rax                           eax           ax|ah       al
-rbx                           ebx           bx|bh       bl
-rcx                           ecx           cx|ch       cl
-rdx                           edx           dx|dh       dl
-rsi                           esi           si|         sil
-rdi                           edi           di|         dil
-rbp                           ebp           bp|         bpl
-rsp                           esp           sp|         spl
-r8                            r8d          r8w|         r8b
-r9                            r9d          r9w|         r9b
-r10                          r10d         r10w|         r10b
-r11                          r11d         r11w|         r11b
-r12                          r12d         r12w|         r12b
-r13                          r13d         r13w|         r13b
-r14                          r14d         r14w|         r14b
-r15                          r15d         r15w|         r15b
-................................................................
+                    63............................31...............15.......7......0
+return values ----> rax                           eax           ax|ah       al
+                   *rbx                           ebx           bx|bh       bl
+first parameter --> rcx                           ecx           cx|ch       cl
+second parameter -> rdx                           edx           dx|dh       dl
+                   *rsi                           esi           si|         sil
+                   *rdi                           edi           di|         dil
+                   *rbp                           ebp           bp|         bpl
+stack pointer ---->*rsp                           esp           sp|         spl
+third parameter --> r8                            r8d          r8w|         r8b
+fourth parameter -> r9                            r9d          r9w|         r9b
+                    r10                          r10d         r10w|         r10b
+                    r11                          r11d         r11w|         r11b
+                   *r12                          r12d         r12w|         r12b
+                   *r13                          r13d         r13w|         r13b
+                   *r14                          r14d         r14w|         r14b
+                   *r15                          r15d         r15w|         r15b
+                    ................................................................
 
 There are 8 floating-point registers implemented in the x87 floating-point unit (FPU) named ST(0) to ST(7).
 Each register is 80 bits wide, holding an extended-precision real value.
+Application programs cannot directly access these. Instead, a program treats the floating-point register file as an
+eight-entry-deep stack and accesses only the top one or two entries.
+
+Intel Make Oopsie
+-----------------
+
+In the 1990s, Intel introduced the MMX register set and instructions to support SIMD operations. These 8, 64-bit
+registers overlay the ST(0) to ST(7) FPU registers. The decision to overlay the FPU registers was made because it would
+make the MMX registers immediately compatible with multitasking operating systems. However, this meant that an
+application could not use the FPU and MMX instructions at the same time.
+
+Intel Corrects its Oopsie
+-------------------------
+
+XMM register set and SSE/SSE2 instruction set. With this introduction, MMX registers are rarely used.
+These are 16, 128-bit registers (XMM0 to XMM15).
+Can be configured as:
+- four 32-bit floating-point registers
+- two 64-bit double-precision floating-point registers
+- integer registers:
+    - sixteen 8-bit
+    - eight 16-bit
+    - four 32-bit
+    - two 64-bit
+    - one 128-bit
+
+Later variants of the x86-64 CPU have doubled versions (256 bits) named YMM0 to YMM15 to support
+- eight 32-bit floating-point values
+- four 64-bit double-precision floating-point values
+- integer operations still limited to 128 bits
 
 The RFLAGS (or just FLAGS) register is a 64-bit register that encapsulates several single-bit boolean values.
 Most are reserved for kernel mode or are of little interest to application programmers.
