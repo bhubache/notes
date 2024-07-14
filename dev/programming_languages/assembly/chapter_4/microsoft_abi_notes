@@ -1,0 +1,7 @@
+- Fields of an array must be aligned on their natural size
+    - the offset from the beginning of the structure to a given field must be a multiple of the field's size
+- Additionally, the whole structure must be aligned at a memory address that is a multiple of the size of the largest
+  object in the structure (up to 16 bytes)
+- Finally, the entire structure's size must be a multiple of the largest element in the structure
+    - you must add padding bytes to the end of the structure if needed
+- The above only applies to passing an array or struct to another language

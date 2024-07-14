@@ -1,0 +1,231 @@
+Elements can have different types
+You can select an element (known as a field) by name
+Purpose is to let you encapsulate diferent, though logically related, data into a single package.
+
+MASM Struct Declarations
+------------------------
+
+Use the struct/ends declaration::
+
+    student  struct
+    sName    byte    65 dup (?)  ; "Name" is a MASM reserved word
+    Major    word    ?
+    SSN      byte    12 dup (?)
+    Midterm1 word    ?
+    Midterm2 word    ?
+    Final    word    ?
+    Homework word    ?
+    Projects word    ?
+    student  ends
+
+Field names within a struct must be unique.
+The struct/ends declaration may appear anywhere in the source file as long as you define it before using it.
+** A struct declaration does not actually allocate any storage. You have to explicitly declare a variable **
+
+```
+      .data
+John  student {}
+```
+
+This allocates 89 bytes of storage laid out in mmemory contiguously.
+- John is the base address
+- sName is at offset John + 0
+- Major is at offset John + 65
+- SSN   is at offset John + 65 + 2
+- etc.
+
+Accessing Record/Struct Fields
+------------------------------
+
+Memorizing the offset of each field from the base address would defeat the purpose of having an additional type as it
+would just be a heterogenous array.
+So, MASM provides the dot operator:
+
+    John.Final
+
+This still uses the PC-relative addressing mode, MASM simply adds the base address of John with the offset to the
+field to get the actual displacement to encode into the instruction.
+
+What happens when you have a pointer to a record object?
+
+```
+mov  rcx, sizeof student  ; Size of student struct
+call malloc               ; Returns pointer in RAX
+mov [rax].Final, 100
+```
+
+Unfortunately, this will not work because the ``Final`` field name is local to the student structure and so MASM will
+complain that the name ``Final`` is undefined.
+
+** Corrected Code **
+
+```
+mov  rcx, sizeof student  ; Size of student struct
+call malloc               ; Returns pointer in RAX
+mov [rax].student.Final, 100
+```
+
+Nesting MASM Structs
+--------------------
+
+You can do this and access fields of these nested structures with the same dotted notation.
+
+Initializing Struct Fields
+--------------------------
+
+You can provide initial values to fields by supplying a list of comma-separated items between the curly braces.
+
+strDesc struct
+maxLen  dword   ?
+len     dword   ?
+strPtr  qword   ?
+strDesc ends
+
+        .data
+
+charData byte   "Initial String Data", 0
+len      =      lengthof charData ; Includes the zero byte
+
+aString  strDesc {len, len, offset charData}
+
+If a structure field is an array, you need to be careful when initializing the fields with data:
+
+aryStruct struct
+aryField1 byte    8 dup (?)
+aryField2 word    4 dup (?)
+aryStruct ends
+
+The initialization operands must either be a string or a single item.
+
+Not Allowed
+===========
+
+a aryStruct {1,2,3,4,5,6,7,8  1,2,3,4}
+
+Presumably, this is an attempt to initialize aryField1 wit {1,2,3,4,5,6,7,8} and aryField2 with {1,2,3,4}. MASM,
+however, won't accept this because it sees this as 12 items and the struct doesn't have 12 fields.
+MASM expects two values:
+
+a aryStruct {{1,2,3,4,5,6,7,8}, {1,2,3,4}}
+
+***
+- Too many initializers: MASM will report an error
+- Too few  initializers: MASM will quietly fill in the remaining array entries with 0
+
+    a aryStruct {{1,2,3,4}, {1,2,3,4}}
+    a.aryField1 will be {1,2,3,4,0,0,0,0}
+***
+
+If the field is an array of bytes, you can use a character string, of the appropriate length, for the list of byte
+values::
+
+    b aryStruct {"abcdefgh", {1,2,3,4}}
+
+Arrays of Structs
+-----------------
+
+myArray  struct_name n dup ({})
+
+```
+recElement struct
+; Fields for this struct
+recElement ends
+
+.
+.
+.
+
+        .data
+recArray  recElement 4 dup ({})
+
+.
+.
+.
+
+        .code
+; Access element i of recArray:
+; RBX := i*lengthOf(recElement)
+
+imul ebx, i, sizeOf recElement    ; Zero-extends EBX to RBX!
+mov  eax, recArray.someField[rbx] ; LARGEADDRESSAWARE:NO!
+```
+
+This may look weird because a high-level language would probably use recArray[i].someField.
+But remember this is assembly :). The index acccess follows the entire variable name
+
+Aligning Fields Within a Record
+-------------------------------
+
+For maximum performance, you need to ensure that the fields are properly aligned
+Consider the following structure with unaligned fields:
+
+```
+Padded  struct
+b       byte    ?
+d       dword   ?
+b2      byte    ?
+b3      byte    ?
+w       word    ?
+Padded ends
+```
+
+Here's how MASM organizes this structure's fields in memory (supply /F1 cli option to ml64.exe to see this):
+
+
+                 Name                   Size Offset     Type
+
+Padded . . . . . . . . . . . . .        00000009        
+ b . . . . . . . . . . . . . . .        00000000        byte
+ d . . . . . . . . . . . . . . .        00000001        dword
+ b2. . . . . . . . . . . . . . .        00000005        byte
+ b3. . . . . . . . . . . . . . .        00000006        byte
+ w . . . . . . . . . . . . . . .        00000007        word
+
+The ``d`` and ``w`` fields are both aligned on odd offsets, which may result in slower performance. Ideally, ``d`` would
+be aligned on a double-word offset (multiple of 4) and ``w`` on an even offset.
+
+You can fix this by adding align directives to the structure:
+
+```
+Padded  struct
+b       byte    ?
+        align   4
+d       dword   ?
+b2      byte    ?
+b3      byte    ?
+        align   2
+w       word    ?
+Padded ends
+```
+
+                 Name                   Size Offset     Type
+
+Padded . . . . . . . . . . . . .        0000000C        
+ b . . . . . . . . . . . . . . .        00000000        byte
+ d . . . . . . . . . . . . . . .        00000004        dword
+ b2. . . . . . . . . . . . . . .        00000008        byte
+ b3. . . . . . . . . . . . . . .        00000009        byte
+ w . . . . . . . . . . . . . . .        0000000A        word
+
+There's an additional option that let's you automatically align objects in a struct declaration.
+If you supply a value (which must be 1, 2, 4, 8, or 16) as the operand to the struct statement, MASM will automatically
+align all fields to an offset that is a multiple of that field's size OR the value you specify, *whichever is smaller*.
+
+```
+Padded  struct  4
+b       byte    ?
+d       dword   ?
+b2      byte    ?
+b3      byte    ?
+w       word    ?
+Padded ends
+```
+
+                 Name                   Size Offset     Type
+
+Padded . . . . . . . . . . . . .        0000000C        
+ b . . . . . . . . . . . . . . .        00000000        byte
+ d . . . . . . . . . . . . . . .        00000004        dword
+ b2. . . . . . . . . . . . . . .        00000008        byte
+ b3. . . . . . . . . . . . . . .        00000009        byte
+ w . . . . . . . . . . . . . . .        0000000A        word

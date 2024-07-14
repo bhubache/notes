@@ -1,0 +1,82 @@
+A struct assigns different offsets to each field according to the size of those fields must like the allocation of
+memory offsets in a .data?, .data, or .const section.
+
+A second type of structure declaration provided by MASM, union, which has all fields at offset 0.
+
+myUnion union
+; Fields (syntactically identical to struct declarations)
+myUnion ends
+
+If it really bothers you having ends rather than endu, you can create a textequ::
+
+    endu textequ <ends>
+
+Because all the fields have the same offset, the fields of a union overlap in memory. This is similar to how the x86-64
+8-, 16-, 32-, and 64-bit general-purpose registers overlap.
+Writing to one field overlaps the others.
+
+Unions are typically used for two reasons:
+1. To conserve memory (the intended use)
+2. To create aliases (can often create confusion to use them sparingly)
+
+Anonymous Unions
+----------------
+
+HasAnonUnion struct
+r            real8    ?
+
+             union
+u            dword    ?
+i            sdword   ?
+             ends
+
+s            qword    ?
+HasAnonUnion ends
+
+             .data
+v            HasAnonUnion {}
+
+You create an anonymous union by just not giving it a name within a struct declaration.
+You can access the anonymous unions fields as if they were direct fields of the containing struct.
+
+The offsets of v are:
+v.r    0
+v.u    8
+v.i    8
+v.s   12
+
+sizeof(v) is 20
+
+MASM also allows anonymous structures in unions.
+
+Variant Types
+-------------
+
+One big use of unions is to create variant types.
+Variant variables can change their type dynamically while the program is running.
+
+At any given instant during program execution, a variant object has a specific type, but a program can switch the
+variable to a different type. If statements, switch statements, or something similar must be used then to execute
+different instructions based on the object's current type. VHLLs do this transparently but in assembly you must do this
+yourself.
+A field (often called the tag) that specifies the current type is a common implementation. See the following example
+where 0 means uns32, 1 means int32, and 2 means real64
+
+```
+VariantType struct
+tag         dword    ?  ; 0-uns32, 1-int32, 2-real64
+
+            union
+u           dword    ?
+i           sdword   ?
+r           real8    ?
+            ends
+VariantType ends
+
+            .data
+v           VariantType {}
+```
+
+The program would test the tag field to determine the current type and act accordingly.
+When operating with variant objects, the program's code must constantly check the tag field and execute the
+corresponding code. It makes a lot of sense then to use procedures to handle this.
