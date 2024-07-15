@@ -1,0 +1,39 @@
+Because the return address is saved to the stack when ``call`` is executed, make sure you pop all the data you push
+within a procedure.
+
+Consider the following defective procedure:
+
+```
+MessedUp    proc
+            push rax
+            ret
+
+MessedUp    endp
+```
+
+When the ``ret`` instruction is encountered the stack looks like:
+
++-------------------------+
+| previous stack contents |
++-------------------------+
+|      return address     |
++-------------------------+
+|     saved RAX value     | <-------- RSP
++-------------------------+
+|                         |
++-------------------------+
+
+The ``ret`` instruction isn't aware that the value on the top of the stack isn't the correct return address, it just
+pops whatever is at the top and jumps to that location. It's very unlikely that RAX's value is the correct return
+address and so the program will probably crash or have some other undefined behavior.
+
+Similarly, if you pop too many values off the stack, you can have problems.
+If you popped one too many times, then the value used as the return address will be the return address for the procedure
+that called MessedUp.
+
+Activation Records
+------------------
+
+A data structure used to associate the return address, parameters, and automatic local variables with a procedure call.
+This is also called a stack frame.
+The data is organized in a manner identical to structs.

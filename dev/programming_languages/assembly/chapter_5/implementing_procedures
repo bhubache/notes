@@ -1,0 +1,61 @@
+Procedure declaration has the following form:
+
+`proc_name` proc `options`
+    `Procedure statements`
+`proc_name` endp
+
+The call and ret Instructions
+-----------------------------
+
+``call`` does two things:
+1. Pushes the (64-bit) address of the instruction immediately following the ``call`` onto the stack
+    - This address is referred to as the *return address*
+2. Transfers control to the address of the specified procedure
+
+``ret`` does two things:
+1. Pops the (64-bit) return address off the stack
+2. Transfers control indirectly to that address
+
+If you don't put ``ret`` in your procedure, the program will fall through to whatever code happens to follow the
+procedure in memory.
+
+Labels in a Procedure
+---------------------
+
+Statement labels defined within a procedure are local to that procedure and are thus not visible outside the procedure.
+
+If you want to refer to a statement label outside a procedure, you can use a global statement label:
+
+```
+myGlobalSymbol:: mov eax, 0
+```
+
+You can use:
+
+```
+option scoped
+option noscoped
+```
+
+To enable or disable scoping respectively for all procedures that follow the directive.
+
+Saving the State of the Machine
+-------------------------------
+
+There are two choices when preserving registers across procedure calls:
+1. Callee preservation (the called procedure)
+    - 2 advantages:
+        1. space
+        2. maintainability
+    - Only one copy of the push and pop instructions exist -- those the procedure contains
+    - If the caller saves the values in the registers, the program needs a set of preservation instructions around every
+      throughout the program, hurting readability and maintainability. Additionally, remembering which registers to save
+      on each procedure call is not easy
+    - Cons
+        - the subroutine may unnecessarily preserve some registers if it preserves all the registers it modifies
+2. Caller preservation (the calling procedure)
+
+A common convention (barring performance reasons) is for the called procedure to preserve every register it modifies (
+and doesn't explicitly return a value in)
+
+You can also preserve variables on the stack.
