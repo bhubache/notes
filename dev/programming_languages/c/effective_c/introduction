@@ -1,0 +1,15 @@
+Spirit Of C
+-----------
+
+- trust the programmer. Generally, C assumes you know what you're doing.
+- don't prevent the programmer from doing what needs to be done
+- keep the language small and simple
+- provide only one way to do an operation
+- make it fast, even if it isn't guaranteed to be portable
+    - ensuring that code is portable, safe, and secure is the responsibility of the programmer
+
+implementations == compilers
+
+the C standard defines them as follows:
+A particular set of software, running in a particular translation environment under particular control options, that
+performs translation of programs for, and supports execution of programs in, a particular execution environment.

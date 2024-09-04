@@ -1,0 +1,63 @@
+5 Kinds Of Portability Issues
+-----------------------------
+
+Implementation Defined Behavior
+===============================
+
+Criteria:
+1. Behavior not specified by the C standard
+2. May offer different results among implementations
+3. Consistent, documented behavior within an implementation
+
+Example
++++++++
+
+Number of bits in a byte.
+
+Notes
++++++
+
+- Mostly harmless but can cause defects when porting to different implementations
+- Avoid whenever possible
+- Find complete list in Annex J.3 of the C Standard
+- Document these types of dependencies by using a static_assert declaration
+
+Unspecified Behavior
+====================
+
+Criteria:
+1. Behavior for which the standard provides two or more options
+
+Example
++++++++
+
+Funtion parameter storage layout.
+
+Notes
++++++
+
+- The standard imposes no requirements on which option is chosen in any instance.
+- Find complete list in Annex J.1 of the C Standard
+
+Undefined Behavior
+==================
+
+Criteria:
+1. Behavior that isn't defined by the C Standard
+
+Examples
+++++++++
+
+1. Signed integer overflow
+2. Dereferencing an invalid pointer value
+
+Notes
++++++
+
+- See Annex J.2 of the C standard
+
+Locale Specific Behavior and Common Extensions
+==============================================
+
+- Locale specific behavior depends on conventions of nationality, culture, and language that each implementation documents
+- Common extensions are widely used in many systems but are not portable to all implementations

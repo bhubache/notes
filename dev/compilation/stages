@@ -1,0 +1,16 @@
+source.c --(pre-processor)--> source.i --(compiler)--> source.s --(asm)--> source.o --(linker)--> executable
+
+.so is a shared object file and is dynamically linked
+
+Header Guard
+------------
+
+Use the following pattern to make sure #include <foo> is only included once
+
+// source.h
+#ifndef FOO
+#define FOO
+// some method declaration but not definition
+#endif
+
+gcc -E source.c  // for pre-processing only

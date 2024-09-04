@@ -37,3 +37,110 @@ Activation Records
 A data structure used to associate the return address, parameters, and automatic local variables with a procedure call.
 This is also called a stack frame.
 The data is organized in a manner identical to structs.
+
+Let's work through this with an example C+ procedure declaration:
+
+```
+void ARDemo(unsigned i, int j, unsigned k)
+{
+    int a;
+    float r;
+    char c;
+    bool b;
+    short w
+    .
+    .
+    .
+}
+```
+
+First Step
+==========
+
+When a program calls the ARDemo procedure, it begins by pushing the parameters onto the stack in the opposite order that
+they appear in the parameter list (in the original C/C++ convention ignoring the Microsoft ABI).
+So, it first pushes the value for k, then j, and lastly i. Then, the program calls the ARDemo procedure.
+The following is what teh stack looks like immediately upon entry into the ARDemo procedure (all parameters are in the
+correct order with the first parameter at the lowest address).
+
+Note: for performance reasons, the RSP should always be aligned on an 8-byte boundary. For this (and other reasons),
+modern programs always reserve at least 8 bytes for each parameter, regardles of the actual parameter size.
+
++-------------------------+
+| previous stack contents |
++-------------------------+
+|        k's value        |
++-------------------------+
+|        j's value        |
++-------------------------+
+|        i's value        |
++-------------------------+
+|     return address      | <-------- RSP
++-------------------------+
+
+Note: the microsoft ABI requires the stack to be aligned on a 16-byte boundary when making system calls
+
+Second Step
+===========
+
+The first few instructions of ARDemo will push the current value of RBP onto the stack and then copy the value of RSP
+into RBP. It then drops the stack pointer down in memory to make room for the local variables.
+
+  +-------------------------+
+  | previous stack contents |
+  +-------------------------+
+  |        k's value        | +32
+  +-------------------------+
+  |        j's value        | +24
+  +-------------------------+
+  |        i's value        | +16
+  +-------------------------+
+  |     return address      | +8
+  +-------------------------+
+  |     Old RBP value       | +0 <-------- RBP
+  +-------------------------+
+a |                         | -4
+  +-------------------------+
+r |                         | -8
+  +-------------------------+
+c |                         | -9
+  +-------------------------+
+b |                         | -10
+  +-------------------------+
+w |                         | -12
+  +-------------------------+
+  |    Possible padding     | -16 <-------- RSP
+  +-------------------------+
+
+Note: parameters don't have to be a multiple of 8 bytes in the activation record (stack frame). However, the entire
+block of local variables must be a multiple of 16 bytes so that RSP remains aligned on a 16-byte boundary as required by
+the Microsoft ABI.
+
+Accessing Objects in the Activation Record
+==========================================
+
+You must use offsets from the RBP register.
+- Parameters at positive offsets
+- Local variables at negative offsets
+
+Activation Record Using Microsoft ABI Conventions
+=================================================
+
+- The caller passes the first four parameters in registers rather than on the stack (though it must still reserve
+  storage on the stack for those parameters)
+- Parameters are always 8-byte values (same as we've already done)
+- The caller must reserve at least 32 bytes of parameter data on the stack, even if there are fewer than five parameters (shouldn't this be fewer than 4?)
+- RSP must be 16-byte aligned immediately before the ``call`` instruction pushes the return address onto the stack
+
+The Assembly Language Standard Entry Sequence
+---------------------------------------------
+
+Done at the top of the called procedure:
+
+```
+push rbp          ; Save a copy of the old RBP value
+mov rbp, rsp      ; Get pointer to activation record into RBP
+sub rsp, num_vars ; Allocate local variable storage plus padding
+
+num_vars is the number of bytes of local variables needed by the procedure.
+```
